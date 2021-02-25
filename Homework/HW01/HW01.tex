@@ -16,12 +16,12 @@
 % 小题
 \newenvironment{steps}{\begin{list}{}{\renewcommand{\makelabel}[1]{##1.\hfil}}}{\end{list}}
 % 答
-\providecommand{\ans}{\textbf{答}.~}
+\providecommand{\ans}{\textbf{答}:~}
 % 解
 \providecommand{\sol}{\textbf{解}.~}
 
 \begin{document}
-\title{第 1 次作业}
+\title{\normalsize \underline{操作系统(D)}\\\LARGE第 1 次作业}
 \author{李子龙 518070910095}
 \date{\today}
 \maketitle
@@ -29,11 +29,20 @@
 \begin{problems}
     \item[1.1] What are the three main purposes of an operating system?
     
-    \ans 操作系统的三个目标：
+    \ans 操作系统的三个目的：
+    \begin{enumerate}
+        \item 管理计算机系统的资源（CPU时间、内存空间、文件存储空间、I/O设备等）；
+        \item 优化用户进行的工作，让用户使用方便。
+        \item 控制各种 I/O 设备和用户程序的需求。
+    \end{enumerate}
     \item[1.3] What is the main difficulty that a programmer must overcome in writing
     an operating system for a real-time environment?
+
+    \ans 最大的困难在于\textbf{处理必须在固定时间约束内完成}，否则系统就会出错。实时系统具有明确的、固定的时间约束，只有在时间约束内返回正确结果，实时系统的运行才是正确的。
     \item[1.5] How does the distinction between kernel mode and user mode function
     as a rudimentary form of protection (security)?
+
+    \ans 将可能引起损害的机器指令作为\textbf{特权指令}，并且硬件只有在\textbf{内核模式}下才允许执行特权指令。如果在\textbf{用户模式}下试图执行特权指令，那么硬件并不执行该指令，而是认为该指令非法，并将其以陷阱形式通知操作系统。如此就提供了基本的保护手段，以便防止操作系统和用户程序受到错误用户程序的影响。
     \item[1.6] Which of the following instructions should be privileged?
     \begin{enumerate}[a.]
         \item Set value of timer.
@@ -44,12 +53,43 @@
         \item Modify entries in device-status table.
         \item Switch from user to kernel mode.
         \item Access I/O device.
-    \end{enumerate} 
+    \end{enumerate}
+
+    \ans 修改计时器时间(a.)、清理内存(c.)、下达陷阱指令(d.)、关闭中断(e.)、修改设备状态表信息(f.)。
     \item[1.10] Give two reasons why caches are useful.What problems do they solve?
     What problems do they cause? If a cache can be made as large as the device for which it is caching (for instance, a cache as large as a disk),
     why not make it that large and eliminate the device?
+
+    \ans 高速缓存有用的原因：
+    \begin{enumerate}
+        \item 如果需要的信息在高速缓存中，就可以直接使用告诉缓存的信息，而不需要从内存慢速读取。
+        \item 大多数系统都有一个指令的高速缓存，用以保存下个需要执行的指令。如果没有这一高速缓存，CPU 要用多个时钟周期才能从内存中获得下一个指令。
+    \end{enumerate}
+
+    解决的问题：
+    \begin{enumerate}
+        \item 解决了以前在慢速存储设备上进行指令需要较长长时间运转的问题。内存（外存的高速缓存）的出现能够对硬盘或者磁带上的信息进行处理。
+        \item 解决了指令集获得时间较长、浪费 CPU 时钟周期的问题。
+    \end{enumerate}
+
+    导致的问题：
+    \begin{enumerate}
+        \item 高速缓存一致性问题。对于多处理器环境，需要即使更新多个高速缓存下信息副本的拷贝。
+        \item 并发访问问题。对于分布式环境，同一个文件的多个副本会被并发访问和更新，需要处理并发访问。
+    \end{enumerate}
+
+    为什么不把高速缓存作为主要的存储设备，主要是因为高速缓存一般是\textbf{易失性}的存储设备，掉电时就会失去所有内容。当然现在也有非易失性的内存，但是高速缓存一般速度快，但存储时间短、价格昂贵，不够经济。
     \item[1.11] Distinguish between the client–server and peer-to-peer models of distributed
     systems.
+
+    \ans 主要有根本、服务负荷和服务接口上的区别。
+    \begin{description}
+        \item[根本区别] \textbf{客户机-服务器系统}有服务器用于服务客户机；而\textbf{对等系统}并不区分客户机和服务器。
+        \item[服务负荷] \textbf{客户机-服务器系统}中服务器会有大量来自客户机的服务请求，会造成服务器大量的负荷，直到达到吞吐量瓶颈；而\textbf{对等系统}将负荷比较均匀地分布在了每个机器上。
+        \item[服务接口] \textbf{客户机-服务器系统}由服务器提供服务接口：计算服务器系统提供用于响应用户数据请求的接口，而文件服务器系统提供文件系统接口，用于客户机创建、更新、访问和删除文件；而\textbf{对等系统}或者需要一个网络集中查询服务获取服务目标以便客户机和服务者之间的通信，或者向网络中所有机器广播服务请求，以发现哪个节点可以提供所需的服务。
+    \end{description}
+    
+
 \end{problems}
 
 
