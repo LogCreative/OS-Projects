@@ -1,0 +1,7 @@
+\begin{Verbatim}[commandchars=\\\{\}]
+Please input the power of polynomial:2
+Please input the coefficients of polynomial(start from the constant):\PYGZhy{}11 1 5
+Please input the solving interval:1 5
+The zero of function(Binary Method):1.38661
+The zero of function(Newton\PYGZsq{}s Method):1.38661
+\end{Verbatim}

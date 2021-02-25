@@ -1,0 +1,9 @@
+\begin{Verbatim}[commandchars=\\\{\}]
+Please input the power of polynomial:2
+Please input the coefficients of polynomial(start from the constant):1 1 5
+Please input the solving interval:1 5
+The zero of function(Binary Method):The symbol of the function values of each side should be different.
+nan
+The zero of function(Newton\PYGZsq{}s Method):Out of iteration limit.
+nan
+\end{Verbatim}

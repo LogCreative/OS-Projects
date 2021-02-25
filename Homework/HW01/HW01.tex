@@ -1,0 +1,56 @@
+\documentclass[12pt,a4paper]{article}
+\usepackage[UTF8]{ctex}     %先引入ctex
+\usepackage[utf8]{inputenc} %再引入inputenc
+\usepackage{graphicx}
+% \usepackage{lazylatex}
+% \tcbuselibrary{documentation}
+\usepackage{amsmath}
+\usepackage{bookmark}
+\usepackage{enumerate}
+\usepackage{geometry}
+\graphicspath{{img/}}
+% 边距
+\geometry{left=2.0cm,right=2.0cm,top=2.0cm,bottom=3.0cm}
+% 大题
+\newenvironment{problems}{\begin{list}{}{\renewcommand{\makelabel}[1]{\textbf{##1}\hfil}}}{\end{list}}
+% 小题
+\newenvironment{steps}{\begin{list}{}{\renewcommand{\makelabel}[1]{##1.\hfil}}}{\end{list}}
+% 答
+\providecommand{\ans}{\textbf{答}.~}
+% 解
+\providecommand{\sol}{\textbf{解}.~}
+
+\begin{document}
+\title{第 1 次作业}
+\author{李子龙 518070910095}
+\date{\today}
+\maketitle
+
+\begin{problems}
+    \item[1.1] What are the three main purposes of an operating system?
+    
+    \ans 操作系统的三个目标：
+    \item[1.3] What is the main difficulty that a programmer must overcome in writing
+    an operating system for a real-time environment?
+    \item[1.5] How does the distinction between kernel mode and user mode function
+    as a rudimentary form of protection (security)?
+    \item[1.6] Which of the following instructions should be privileged?
+    \begin{enumerate}[a.]
+        \item Set value of timer.
+        \item Read the clock.
+        \item Clear memory.
+        \item Issue a trap instruction.
+        \item Turn off interrupts.
+        \item Modify entries in device-status table.
+        \item Switch from user to kernel mode.
+        \item Access I/O device.
+    \end{enumerate} 
+    \item[1.10] Give two reasons why caches are useful.What problems do they solve?
+    What problems do they cause? If a cache can be made as large as the device for which it is caching (for instance, a cache as large as a disk),
+    why not make it that large and eliminate the device?
+    \item[1.11] Distinguish between the client–server and peer-to-peer models of distributed
+    systems.
+\end{problems}
+
+
+\end{document}

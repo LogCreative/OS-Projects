@@ -1,0 +1,51 @@
+\begin{Verbatim}[commandchars=\\\{\}]
+\PYG{c+cp}{\PYGZsh{}ifndef POLY}
+\PYG{c+cp}{\PYGZsh{}define POLY}
+
+\PYG{c+c1}{// 多项式类}
+\PYG{k}{class} \PYG{n+nc}{Polynomial} \PYG{p}{\PYGZob{}}
+\PYG{k}{private}\PYG{o}{:}
+    \PYG{k+kt}{int}         \PYG{n}{n}\PYG{p}{;}          \PYG{c+c1}{//次数}
+    \PYG{k+kt}{double}\PYG{o}{*}     \PYG{n}{coeff}\PYG{p}{;}      \PYG{c+c1}{//系数}
+\PYG{k}{public}\PYG{o}{:}
+    \PYG{c+c1}{// constructor}
+    \PYG{n}{Polynomial}\PYG{p}{()\PYGZob{}}
+        \PYG{n}{std}\PYG{o}{::}\PYG{n}{cout} \PYG{o}{\PYGZlt{}\PYGZlt{}} \PYG{l+s}{\PYGZdq{}Please input the power of polynomial:\PYGZdq{}}\PYG{p}{;}
+        \PYG{n}{std}\PYG{o}{::}\PYG{n}{cin} \PYG{o}{\PYGZgt{}\PYGZgt{}} \PYG{n}{n}\PYG{p}{;}
+        \PYG{n}{coeff} \PYG{o}{=} \PYG{k}{new} \PYG{k+kt}{double}\PYG{p}{[}\PYG{n}{n} \PYG{o}{+} \PYG{l+m+mi}{1}\PYG{p}{];}
+        \PYG{n}{std}\PYG{o}{::}\PYG{n}{cout} \PYG{o}{\PYGZlt{}\PYGZlt{}} \PYG{l+s}{\PYGZdq{}Please input the coefficients of polynomial(start from the constant):\PYGZdq{}}\PYG{p}{;}
+        \PYG{k}{for}\PYG{p}{(}\PYG{k+kt}{int} \PYG{n}{i} \PYG{o}{=} \PYG{l+m+mi}{0}\PYG{p}{;} \PYG{n}{i} \PYG{o}{\PYGZlt{}=} \PYG{n}{n}\PYG{p}{;} \PYG{o}{++}\PYG{n}{i}\PYG{p}{)}
+            \PYG{n}{std}\PYG{o}{::}\PYG{n}{cin} \PYG{o}{\PYGZgt{}\PYGZgt{}} \PYG{n}{coeff}\PYG{p}{[}\PYG{n}{i}\PYG{p}{];}
+    \PYG{p}{\PYGZcb{}}
+
+    \PYG{c+c1}{// 得到函数值}
+    \PYG{k+kt}{double} \PYG{n}{getValue}\PYG{p}{(}\PYG{k+kt}{double} \PYG{n}{x}\PYG{p}{)\PYGZob{}}
+        \PYG{k+kt}{double} \PYG{n}{value} \PYG{o}{=} \PYG{l+m+mi}{0}\PYG{p}{;}
+        \PYG{k+kt}{double} \PYG{n}{item} \PYG{o}{=} \PYG{l+m+mi}{1}\PYG{p}{;}
+        \PYG{k}{for} \PYG{p}{(}\PYG{k+kt}{int} \PYG{n}{i} \PYG{o}{=} \PYG{l+m+mi}{0}\PYG{p}{;} \PYG{n}{i}\PYG{o}{\PYGZlt{}=} \PYG{n}{n}\PYG{p}{;} \PYG{o}{++}\PYG{n}{i}\PYG{p}{)\PYGZob{}}
+            \PYG{n}{value} \PYG{o}{+=} \PYG{n}{coeff}\PYG{p}{[}\PYG{n}{i}\PYG{p}{]} \PYG{o}{*} \PYG{n}{item}\PYG{p}{;}
+            \PYG{n}{item} \PYG{o}{*=} \PYG{n}{x}\PYG{p}{;}
+        \PYG{p}{\PYGZcb{}}
+        \PYG{k}{return} \PYG{n}{value}\PYG{p}{;}
+    \PYG{p}{\PYGZcb{}}
+
+    \PYG{c+c1}{// 得到导数值}
+    \PYG{k+kt}{double} \PYG{n}{getDerivValue}\PYG{p}{(}\PYG{k+kt}{double} \PYG{n}{x}\PYG{p}{)\PYGZob{}}
+        \PYG{k+kt}{double} \PYG{n}{derivValue} \PYG{o}{=} \PYG{l+m+mi}{0}\PYG{p}{;}
+        \PYG{k+kt}{double} \PYG{n}{item} \PYG{o}{=} \PYG{l+m+mi}{1}\PYG{p}{;}
+        \PYG{k}{for} \PYG{p}{(}\PYG{k+kt}{int} \PYG{n}{i} \PYG{o}{=} \PYG{l+m+mi}{1}\PYG{p}{;} \PYG{n}{i}\PYG{o}{\PYGZlt{}=} \PYG{n}{n}\PYG{p}{;} \PYG{o}{++}\PYG{n}{i}\PYG{p}{)\PYGZob{}}
+            \PYG{n}{derivValue} \PYG{o}{+=} \PYG{n}{i} \PYG{o}{*} \PYG{n}{coeff}\PYG{p}{[}\PYG{n}{i}\PYG{p}{]} \PYG{o}{*} \PYG{n}{item}\PYG{p}{;}
+            \PYG{n}{item} \PYG{o}{*=} \PYG{n}{x}\PYG{p}{;}
+        \PYG{p}{\PYGZcb{}}
+        \PYG{k}{return} \PYG{n}{derivValue}\PYG{p}{;}
+    \PYG{p}{\PYGZcb{}}
+
+    \PYG{c+c1}{// distructor}
+    \PYG{o}{\PYGZti{}}\PYG{n}{Polynomial}\PYG{p}{()\PYGZob{}}
+        \PYG{k}{delete}\PYG{p}{[]} \PYG{n}{coeff}\PYG{p}{;}
+    \PYG{p}{\PYGZcb{}}
+\PYG{p}{\PYGZcb{};}
+
+
+\PYG{c+cp}{\PYGZsh{}endif}
+\end{Verbatim}

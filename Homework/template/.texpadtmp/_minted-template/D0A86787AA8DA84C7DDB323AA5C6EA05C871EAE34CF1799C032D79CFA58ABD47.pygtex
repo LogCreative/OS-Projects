@@ -1,0 +1,8 @@
+\begin{Verbatim}[commandchars=\\\{\}]
+Please input the power of polynomial:2
+Please input the coefficients of polynomial(start from the constant):\PYGZhy{}1 2 5
+Please input the fineness of integral:1000
+Please input the start and end of intergral interval:1 5
+Calculating Process: 100\PYG{c}{\PYGZpc{}}
+226.667
+\end{Verbatim}
