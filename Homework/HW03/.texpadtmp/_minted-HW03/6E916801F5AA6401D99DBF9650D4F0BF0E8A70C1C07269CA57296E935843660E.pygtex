@@ -1,0 +1,9 @@
+\begin{Verbatim}[commandchars=\\\{\}]
+\PYG{n}{pid} \PYG{n}{t} \PYG{n}{pid}\PYG{p}{;}
+\PYG{n}{pid} \PYG{o}{=} \PYG{n}{fork}\PYG{p}{();}
+\PYG{k}{if} \PYG{p}{(}\PYG{n}{pid} \PYG{o}{==} \PYG{l+m+mi}{0}\PYG{p}{)} \PYG{p}{\PYGZob{}} \PYG{c+cm}{/* child process */}
+\PYG{n}{fork}\PYG{p}{();}
+\PYG{k+kr}{thread} \PYG{n+nf}{create}\PYG{p}{(} \PYG{p}{.} \PYG{p}{.} \PYG{p}{.);}
+\PYG{p}{\PYGZcb{}}
+\PYG{n}{fork}\PYG{p}{();}
+\end{Verbatim}

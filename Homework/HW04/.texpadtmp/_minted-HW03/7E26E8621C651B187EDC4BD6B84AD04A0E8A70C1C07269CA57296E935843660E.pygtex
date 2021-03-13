@@ -1,0 +1,20 @@
+\begin{Verbatim}[commandchars=\\\{\}]
+\PYG{c+cp}{\PYGZsh{}include} \PYG{c+cpf}{\PYGZlt{}sys/types.h\PYGZgt{}}
+\PYG{c+cp}{\PYGZsh{}include} \PYG{c+cpf}{\PYGZlt{}stdio.h\PYGZgt{}}
+\PYG{c+cp}{\PYGZsh{}include} \PYG{c+cpf}{\PYGZlt{}unistd.h\PYGZgt{}}
+\PYG{k+kt}{int} \PYG{n}{value} \PYG{o}{=} \PYG{l+m+mi}{5}\PYG{p}{;}
+\PYG{k+kt}{int} \PYG{n+nf}{main}\PYG{p}{()}
+\PYG{p}{\PYGZob{}}
+    \PYG{n}{pid} \PYG{n}{t} \PYG{n}{pid}\PYG{p}{;}
+    \PYG{n}{pid} \PYG{o}{=} \PYG{n}{fork}\PYG{p}{();}
+    \PYG{k}{if} \PYG{p}{(}\PYG{n}{pid} \PYG{o}{==} \PYG{l+m+mi}{0}\PYG{p}{)} \PYG{p}{\PYGZob{}} \PYG{c+cm}{/* child process */}
+        \PYG{n}{value} \PYG{o}{+=} \PYG{l+m+mi}{15}\PYG{p}{;}
+        \PYG{k}{return} \PYG{l+m+mi}{0}\PYG{p}{;}
+    \PYG{p}{\PYGZcb{}}
+    \PYG{k}{else} \PYG{k}{if} \PYG{p}{(}\PYG{n}{pid} \PYG{o}{\PYGZgt{}} \PYG{l+m+mi}{0}\PYG{p}{)} \PYG{p}{\PYGZob{}} \PYG{c+cm}{/* parent process */}
+        \PYG{n}{wait}\PYG{p}{(}\PYG{n+nb}{NULL}\PYG{p}{);}
+        \PYG{n}{printf}\PYG{p}{(}\PYG{l+s}{\PYGZdq{}PARENT: value = \PYGZpc{}d\PYGZdq{}}\PYG{p}{,}\PYG{n}{value}\PYG{p}{);} \PYG{c+cm}{/* LINE A */}
+        \PYG{k}{return} \PYG{l+m+mi}{0}\PYG{p}{;}
+    \PYG{p}{\PYGZcb{}}
+\PYG{p}{\PYGZcb{}}
+\end{Verbatim}
