@@ -165,11 +165,116 @@
 
         \item[3] 重定向输入输出
         
+        \verb"in.txt" 里面存有一些乱序的数字
+        \code{src/in.txt}{}
+
+        \img{redir.png}
+
+        \verb"out.txt" 的文件将命令的输出存储。
+        \code{src/out.txt}{}
+
+        首先需要识别输入输出符号
+        \begin{lstlisting}[language=c]
+            case '>':
+                file_mode = O_WRONLY;
+                args[argc++] = NULL;
+                prev = ' ';
+                file_arg = argc;
+                break;
+            case '<':
+                file_mode = O_RDONLY;
+                args[argc++] = NULL;
+                prev = ' ';
+                file_arg = argc;
+                break;
+        \end{lstlisting}
+        其中 \verb"file_mode" 存储打开文件的模式：\verb"O_WRONLY" 以只写方式打开文件，等价为 1；\verb"O_RDONLY" 以只读方式打开文件，等价为 0。\verb"file_arg" 存储文件名的位置，便于后续调用。而作为命令而言，命令应当在输入输出符号之前终结，因此这里需要添加示意终结的符号 \verb"NULL"；并且将输入输出符号识别为分隔符号，令为空格。
+
+        当识别文件模式大于等于 0 时，就会在子进程中截获控制台输入与输出。在写入模式下，如果文件不存在，文件会被创建。值得一提的是，使用 \verb"dup2" 截获子进程的控制台输入输出并不会影响主进程的输入输出，所以就没有必要去使用一个变量存储主进程的输入输出文件描述符，再赋值回去。子进程需要在完成使用后关闭文件。
+        \begin{lstlisting}[language=c]
+            // child process
+            if(file_mode >= 0){
+                fd = open(args[file_arg], file_mode, PERMS);
+                if(file_mode == O_WRONLY){
+                    if(fd == -1) fd = creat(args[file_arg], PERMS);
+                    if(fd == -1) fprintf(stderr, "%s %s.\n", "Cannot write file", args[file_arg]);
+                    else dup2(fd, STDOUT_FILENO);
+                } else if (file_mode == O_RDONLY){
+                    if(fd == -1) fprintf(stderr, "%s %s.\n", "Cannot read file",args[file_arg]);
+                    else dup2(fd, STDIN_FILENO);
+                }
+            }
+            execvp(args[0],args);
+            if(fd != -1) close(fd);
+            return 0;
+        \end{lstlisting}
+        其中 \verb"PERMS" 被定义为对于所有者、所有者组和其他成员均可读写。
+        \begin{lstlisting}[language=c]
+            #define PERMS 0666
+        \end{lstlisting}
+
+        \item[4] 通过管道建立通信
         
-        \item[4] 
+        输入管道命令
+
+        \img{less.png}
+
+        可以看到数值被正确传入了后一个命令中。
+        
+        \img{pipe.png}
+
+        首先仍然是识别管道符号：
+        \begin{lstlisting}[language=c]
+            case '|':
+                args[argc++] = NULL;
+                prev = ' ';
+                pipe_arg = argc;
+                break;
+        \end{lstlisting}
+        其中 \verb"pipe_arg" 将会存储管道命令开始的位置，当其不为小于 0 的值时，将会触发子进程再次新建一个子进程，并通过管道连接两者。
+        \begin{lstlisting}[language=c]
+            if(pipe_arg < 0){
+                // original child commands ...
+            } else {
+                int pfd[2];
+                pid_t ppid;
+
+                if (pipe(pfd) == -1){
+                    fprintf(stderr, "Pipe Failed");
+                    continue;
+                }
+
+                ppid = fork();
+
+                if(ppid < 0){
+                    fprintf(stderr, "Child Fork Failed");
+                    continue;
+                }
+
+                if(ppid > 0){
+                    close(pfd[READ_END]);
+                    dup2(pfd[WRITE_END], STDOUT_FILENO);
+                    execvp(args[0],args);
+                    close(pfd[WRITE_END]);
+                } else {
+                    close(pfd[WRITE_END]);
+                    dup2(pfd[READ_END], STDIN_FILENO);
+                    execvp(args[pipe_arg],&args[pipe_arg]);
+                    close(pfd[READ_END]);
+                }
+            }
+        \end{lstlisting}
+        子进程将前一个命令的输出输入管道的写入端，子子进程将管道端的读入部分作为自己的输入。这样就完成了管道通信。
+
+        \input{img/pipe.tex}
+        
+        \item[5] 全部代码
+        
         使用下面的 Makefile 编译：
         \code{src/Makefile}{}
-
+        
+        \code{src/osh.c}{c}
+        
     \end{steps} 
     \item[二]  
 
