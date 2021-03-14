@@ -88,4 +88,84 @@
     "terminal.integrated.shell.windows": 
     "C:\\Program Files\\PowerShell\\7\\pwsh.exe",
     "python.pythonPath": "C:\\ProgramData\\Anaconda3\\python.exe",
+    "files.associations": {
+        "hash.h": "c",
+        "gcd.h": "c",
+        "jiffies.h": "c",
+        "module.h": "c",
+        "proc_fs.h": "c",
+        "stdio.h": "c",
+        "unistd.h": "c",
+        "process.h": "c",
+        "io.h": "c",
+        "corecrt_io.h": "c",
+        "corecrt_share.h": "c"
+    },
+    "launch": {
+
+        "configurations": [],
+        "compounds": []
+    },
+    "search.exclude": {
+        "**/linux-5.11.2/linux-5.11.2/.git": true,
+        "**/linux-5.11.2/linux-5.11.2/.svn": true,
+        "**/linux-5.11.2/linux-5.11.2/.DS_Store": true,
+        "**/linux-5.11.2/linux-5.11.2/drivers": true,
+        "**/linux-5.11.2/linux-5.11.2/sound": true,
+        "**/linux-5.11.2/linux-5.11.2/tools": true,
+        "**/linux-5.11.2/linux-5.11.2/arch/alpha": true,
+        "**/linux-5.11.2/linux-5.11.2/arch/arc": true,
+        "**/linux-5.11.2/linux-5.11.2/arch/c6x": true,
+        "**/linux-5.11.2/linux-5.11.2/arch/h8300": true,
+        "**/linux-5.11.2/linux-5.11.2/arch/hexagon": true,
+        "**/linux-5.11.2/linux-5.11.2/arch/ia64": true,
+        "**/linux-5.11.2/linux-5.11.2/arch/m32r": true,
+        "**/linux-5.11.2/linux-5.11.2/arch/m68k": true,
+        "**/linux-5.11.2/linux-5.11.2/arch/microblaze": true,
+        "**/linux-5.11.2/linux-5.11.2/arch/mn10300": true,
+        "**/linux-5.11.2/linux-5.11.2/arch/nds32": true,
+        "**/linux-5.11.2/linux-5.11.2/arch/nios2": true,
+        "**/linux-5.11.2/linux-5.11.2/arch/parisc": true,
+        "**/linux-5.11.2/linux-5.11.2/arch/powerpc": true,
+        "**/linux-5.11.2/linux-5.11.2/arch/s390": true,
+        "**/linux-5.11.2/linux-5.11.2/arch/sparc": true,
+        "**/linux-5.11.2/linux-5.11.2/arch/score": true,
+        "**/linux-5.11.2/linux-5.11.2/arch/sh": true,
+        "**/linux-5.11.2/linux-5.11.2/arch/um": true,
+        "**/linux-5.11.2/linux-5.11.2/arch/unicore32": true,
+        "**/linux-5.11.2/linux-5.11.2/arch/xtensa": true
+    },
+
+    //-------- Files configuration --------
+
+    // Configure glob patterns for excluding files and folders.
+    "files.exclude": {
+        "**/linux-5.11.2/linux-5.11.2/.git": true,
+        "**/linux-5.11.2/linux-5.11.2/.svn": true,
+        "**/linux-5.11.2/linux-5.11.2/.DS_Store": true,
+        "**/linux-5.11.2/linux-5.11.2/drivers": true,
+        "**/linux-5.11.2/linux-5.11.2/sound": true,
+        "**/linux-5.11.2/linux-5.11.2/tools": true,
+        "**/linux-5.11.2/linux-5.11.2/arch/alpha": true,
+        "**/linux-5.11.2/linux-5.11.2/arch/arc": true,
+        "**/linux-5.11.2/linux-5.11.2/arch/c6x": true,
+        "**/linux-5.11.2/linux-5.11.2/arch/h8300": true,
+        "**/linux-5.11.2/linux-5.11.2/arch/hexagon": true,
+        "**/linux-5.11.2/linux-5.11.2/arch/ia64": true,
+        "**/linux-5.11.2/linux-5.11.2/arch/m32r": true,
+        "**/linux-5.11.2/linux-5.11.2/arch/m68k": true,
+        "**/linux-5.11.2/linux-5.11.2/arch/microblaze": true,
+        "**/linux-5.11.2/linux-5.11.2/arch/mn10300": true,
+        "**/linux-5.11.2/linux-5.11.2/arch/nds32": true,
+        "**/linux-5.11.2/linux-5.11.2/arch/nios2": true,
+        "**/linux-5.11.2/linux-5.11.2/arch/parisc": true,
+        "**/linux-5.11.2/linux-5.11.2/arch/powerpc": true,
+        "**/linux-5.11.2/linux-5.11.2/arch/s390": true,
+        "**/linux-5.11.2/linux-5.11.2/arch/sparc": true,
+        "**/linux-5.11.2/linux-5.11.2/arch/score": true,
+        "**/linux-5.11.2/linux-5.11.2/arch/sh": true,
+        "**/linux-5.11.2/linux-5.11.2/arch/um": true,
+        "**/linux-5.11.2/linux-5.11.2/arch/unicore32": true,
+        "**/linux-5.11.2/linux-5.11.2/arch/xtensa": true
+    }
 }

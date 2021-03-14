@@ -1,0 +1,1 @@
+cmd_/mnt/hgfs/VMShared/linux/OS/Project/Project1/src/Module.symvers := sed 's/ko$$/o/' /mnt/hgfs/VMShared/linux/OS/Project/Project1/src/modules.order | scripts/mod/modpost  -a   -o /mnt/hgfs/VMShared/linux/OS/Project/Project1/src/Module.symvers -e -i Module.symvers   -T -

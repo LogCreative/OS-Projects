@@ -1,0 +1,1 @@
+cmd_/mnt/hgfs/VMShared/linux/OS/Project/Project1/src/seconds.mod := { echo  /mnt/hgfs/VMShared/linux/OS/Project/Project1/src/seconds.o;  echo; } > /mnt/hgfs/VMShared/linux/OS/Project/Project1/src/seconds.mod

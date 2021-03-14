@@ -1,0 +1,1 @@
+cmd_/mnt/hgfs/VMShared/linux/OS/Project/Project1/src/simple.ko := ld -r -m elf_x86_64  -z max-page-size=0x200000  --build-id=sha1  -T ./scripts/module-common.lds -o /mnt/hgfs/VMShared/linux/OS/Project/Project1/src/simple.ko /mnt/hgfs/VMShared/linux/OS/Project/Project1/src/simple.o /mnt/hgfs/VMShared/linux/OS/Project/Project1/src/simple.mod.o;  true
