@@ -50,6 +50,10 @@ int main(void){
                     break;
                 case '>':
                     file_mode = O_WRONLY;
+                    args[argc++] = NULL;
+                    prev = ' ';
+                    file_arg = argc;
+                    break;
                 case '<':
                     file_mode = O_RDONLY;
                     args[argc++] = NULL;
@@ -68,37 +72,28 @@ int main(void){
         args[argc] = NULL;
         if (!args[0]) continue;
         should_run = strcmp(args[0],"exit");
-        
-        int fout = dup(STDOUT_FILENO);
-        int fin = dup(STDIN_FILENO);
-        if(file_mode > 0){
-            fd = open(args[file_arg], file_mode, 0);
-            if(file_mode == O_WRONLY){
-                if(fd == -1) fd = creat(args[file_arg], 0);
-                if(fd == -1) fprintf(stderr, "%s %s.\n", "Cannot write file", args[file_arg]);
-                else dup2(fd, STDOUT_FILENO);
-            } else if (file_mode == O_RDONLY){
-                if(fd == -1) fprintf(stderr, "%s %s.\n", "Cannot read file",args[file_arg]);
-                else dup2(fd, STDIN_FILENO);
-            }
-        }
 
         pid_t pid;
         pid = fork();
 
         if (pid < 0) fprintf(stderr, "Fork Failed"); 
         else if (pid == 0) {
+            if(file_mode >= 0){
+                fd = open(args[file_arg], file_mode, 0666);
+                if(file_mode == O_WRONLY){
+                    if(fd == -1) fd = creat(args[file_arg], 0666);
+                    if(fd == -1) fprintf(stderr, "%s %s.\n", "Cannot write file", args[file_arg]);
+                    else dup2(fd, STDOUT_FILENO);
+                } else if (file_mode == O_RDONLY){
+                    if(fd == -1) fprintf(stderr, "%s %s.\n", "Cannot read file",args[file_arg]);
+                    else dup2(fd, STDIN_FILENO);
+                }
+            }
             execvp(args[0],args);
             if(fd != -1) close(fd);
             return 0;
         }
-        else {
-            if(file_mode > 0){
-                dup2(fin, STDIN_FILENO);
-                dup2(fout, STDOUT_FILENO);
-            }
-            if (should_wait) wait(NULL);
-        }
+        else if (should_wait) wait(NULL);
 
     }
 

@@ -108,7 +108,7 @@
         
         \input{img/rline.tex}
 
-        当遇到空格、换行、\verb"&"符号时，都会被替换为 \verb"\0"，从而限制每一个字符串数组的终止位置
+        当遇到空格、换行、\verb"&"符号时，都会被替换为 \verb"\0"，从而限制每一个字符串数组的终止位置，读到换行符会强制终止循环
         \begin{lstlisting}[language=c]
             case '&':
                 should_wait = 0;
@@ -145,38 +145,22 @@
             char buf[MAX_LINE] = "\0";
         \end{lstlisting}
 
-        当连续输入两个 \verb"!" 时，将会首先检查 \verb"buf[0]" 是否是空字符，否则将通过 \verb"memcpy" 将缓存复制到当前的阅读行数组中，注意这里不能使用 \verb"strcpy"，因为其的复制到 \verb"\0" 就会立刻停止，导致后面的部分没有被有效复制。循环条件也增加了 \verb"flag" 判定。
+        当连续输入两个 \verb"!" 时，将会首先检查 \verb"buf[0]" 是否是空字符，否则将通过 \verb"memcpy" 将缓存复制到当前的阅读行数组中，注意这里不能使用 \verb"strcpy"，因为其的复制到 \verb"\0" 就会立刻停止，导致后面的部分没有被有效复制。如果是其他指令，则会被存储到缓冲区中去。
         \begin{lstlisting}[language=c]
-            for(char* rptr = rline; rptr < rline + MAX_LINE && !flag; ++rptr){
-                //...
-                case '!':
-                    if (prev=='!' && argc == 0){
-                        if(!buf[0]){
-                            fprintf(stdout, "%s\n", "No commands in history.");
-                            flag = -1;
-                        } else {
-                            memcpy(rline, buf, MAX_LINE*sizeof(char));
-                            fprintf(stdout, "%s\n", rline);
-                            flag = 2;
-                        }
-                    }
-                    prev = *rptr;
-                    break;
-                //...
+            if (strcmp(rline,"!!\n")==0){
+                if(!buf[0]){
+                    fprintf(stdout, "%s\n", "No commands in history.");
+                    flag = -1;
+                } else {
+                    memcpy(rline, buf, MAX_LINE*sizeof(char));
+                    fprintf(stdout, "%s", rline);
+                }
+            } else memcpy(buf, rline, MAX_LINE*sizeof(char));
         \end{lstlisting}
 
-        如果是正常指令，就会将当前指令复制到缓冲区中去。如果不是正常指令，将不会执行任何指令。
+        如果不是正常指令，将不会执行任何指令。
         \begin{lstlisting}[language=c]
-            switch(flag){
-                case 1:
-                    args[argc] = NULL;
-                case 2:
-                    if (!args[0]) break;
-                    memcpy(buf, rline, MAX_LINE*sizeof(char));
-                    should_run = strcmp(args[0],"exit");
-                    
-                    // run the fork part
-            }
+            if(flag == -1) continue;
         \end{lstlisting}
 
         \item[3] 重定向输入输出

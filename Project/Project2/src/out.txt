@@ -1,0 +1,6 @@
+in.txt
+Makefile
+osh
+osh.c
+osh.exe
+out.txt
