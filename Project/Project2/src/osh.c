@@ -37,7 +37,6 @@ int main(void){
                             fprintf(stdout, "%s\n", "No commands in history.");
                             flag = -1;
                         } else {
-                            // strcpy(rline, buf);
                             memcpy(rline, buf, MAX_LINE*sizeof(char));
                             fprintf(stdout, "%s\n", rline);
                             flag = 2;
@@ -60,7 +59,6 @@ int main(void){
                 args[argc] = NULL;
             case 2:
                 if (!args[0]) break;
-                // strcpy(buf, rline);
                 memcpy(buf, rline, MAX_LINE*sizeof(char));
                 should_run = strcmp(args[0],"exit");
 
