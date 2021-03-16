@@ -12,6 +12,7 @@
 \captionsetup[lstlisting]{labelfont=bf,justification=justified}
 
 \usepackage{tikz}
+\usepackage{appendix}
 
 \graphicspath{{img/}}
 % 边距
@@ -268,17 +269,46 @@
 
         \input{img/pipe.tex}
         
-        \item[5] 全部代码
-        
-        使用下面的 Makefile 编译：
-        \code{src/Makefile}{}
-        
-        \code{src/osh.c}{c}
-        
     \end{steps} 
-    \item[二]  
+    
+    \item[二] \textbf{任务信息内核模块}
+    
+    安装模块 \verb"pid" 后，将进程号输入文件，读取时将会展示进程的相关信息。
+
+    \img{pid.png}
+
+    \begin{steps}
+        \item[1] 写入文件
+        
+        读取到用户信息后，使用 \verb"sscanf" 获取变量并赋值到模块变量 \verb"l_pid" 中。
+        \begin{lstlisting}[language=c]
+            sscanf(k_mem,"%ld",&l_pid);
+        \end{lstlisting}
+
+        \item[2] 读取文件 
+        
+        当获取到 \verb"tsk" 变量时，将会返回进程的相关信息，通过 \verb"sprintf" 读取到 \verb"buffer" 中，稍后将会被返回到用户区，注意此处需要暂存返回的字符串长度到变量 \verb"kv" 中以便返回用户区时系统知晓需要读取的字符数。
+
+        \begin{lstlisting}[language=c]
+            if(tsk!=NULL)
+                rv = sprintf(buffer,"command = [%s] pid = [%ld] state = [%ld]\n",tsk->comm,l_pid,tsk->state);
+            else 
+                rv = sprintf(buffer,"pid [%ld] is not found!\n",l_pid);
+        \end{lstlisting}
+
+    \end{steps}
 
 \end{problems}
 
+\begin{appendix}
+    \section{全部代码}
+
+    \code{src/Makefile}{}
+        
+    \code{src/osh.c}{c}
+
+    \code{src/pid.c}{c}
+
+\end{appendix}
 
 \end{document}

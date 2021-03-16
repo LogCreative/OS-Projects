@@ -1,1 +1,0 @@
-cmd_/mnt/hgfs/VMShared/linux/OS/Project/Project1/src/seconds.ko := ld -r -m elf_x86_64  -z max-page-size=0x200000  --build-id=sha1  -T ./scripts/module-common.lds -o /mnt/hgfs/VMShared/linux/OS/Project/Project1/src/seconds.ko /mnt/hgfs/VMShared/linux/OS/Project/Project1/src/seconds.o /mnt/hgfs/VMShared/linux/OS/Project/Project1/src/seconds.mod.o;  true

@@ -1,0 +1,1 @@
+cmd_/mnt/hgfs/VMShared/linux/OS/Project/Project2/src/pid.ko := ld -r -m elf_x86_64  -z max-page-size=0x200000  --build-id=sha1  -T ./scripts/module-common.lds -o /mnt/hgfs/VMShared/linux/OS/Project/Project2/src/pid.ko /mnt/hgfs/VMShared/linux/OS/Project/Project2/src/pid.o /mnt/hgfs/VMShared/linux/OS/Project/Project2/src/pid.mod.o;  true
