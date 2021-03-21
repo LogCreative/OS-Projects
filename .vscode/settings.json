@@ -99,7 +99,9 @@
         "process.h": "c",
         "io.h": "c",
         "corecrt_io.h": "c",
-        "corecrt_share.h": "c"
+        "corecrt_share.h": "c",
+        "schedulers.h": "c",
+        "list.h": "c"
     },
     "launch": {
 
