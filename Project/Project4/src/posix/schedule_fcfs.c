@@ -5,12 +5,15 @@
 #include <stdlib.h>
 
 struct node* taskList = NULL;
+int value = 0;
 
 void add(char *name, int priority, int burst){
     Task* newTask = (Task*) malloc(sizeof(Task));
     newTask->name = name;
     newTask->priority = priority;
     newTask->burst = burst;
+    newTask->tid = __sync_fetch_and_add(&value,1);
+    newTask->exec = 0;
 
     if(!taskList){
         taskList = malloc(sizeof(struct node));
@@ -32,7 +35,7 @@ void schedule(){
     while(temp){
         Task* thisTask = temp->task;
         run(thisTask,thisTask->burst);
-        temp = temp->next;
         delete(&taskList, thisTask);
+        temp = temp->next;
     }
 }

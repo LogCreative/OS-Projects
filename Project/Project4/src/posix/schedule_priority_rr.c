@@ -4,6 +4,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+int value = 0;
 struct node* taskList = NULL;
 
 void add(char *name, int priority, int burst){
@@ -11,7 +12,13 @@ void add(char *name, int priority, int burst){
     newTask->name = name;
     newTask->priority = priority;
     newTask->burst = burst;
+    newTask->tid = __sync_fetch_and_add(&value,1);
+    newTask->exec = 0;
 
+    addTask(newTask);
+}
+
+void addTask(Task* newTask){
     if(!taskList){
         taskList = malloc(sizeof(struct node));
         taskList->task = newTask;
@@ -42,11 +49,10 @@ void schedule(){
         Task* thisTask = pivot->task;
         int slice = thisTask->burst>QUANTUM? QUANTUM : thisTask->burst;
         run(thisTask, slice);
-        thisTask->burst -= slice;
         
         delete(&taskList, thisTask);
         if(thisTask->burst > 0)
-            add(thisTask->name,thisTask->priority,thisTask->burst);
+            addTask(thisTask);
         pivot = pivot->next;
     }
 }

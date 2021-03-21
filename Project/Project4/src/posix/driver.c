@@ -45,5 +45,7 @@ int main(int argc, char *argv[])
     // invoke the scheduler
     schedule();
 
+    printAvg();
+
     return 0;
 }

@@ -12,6 +12,7 @@
 \captionsetup[lstlisting]{labelfont=bf,justification=justified}
 
 \usepackage{tikz}
+\usepackage{pgfplots}
 \usepackage{appendix}
 
 \graphicspath{{img/}}
@@ -118,7 +119,63 @@
         \includegraphics[width=0.8\textwidth]{prrr2.png}
 
     \end{steps}
-    \item[二] 
+    \item[二] \textbf{Java 语言实现版本}
+    
+    ``may be completed in either C or Java''，所以只需要使用一种语言完成即可。
+    
+    \item[三] 
+    \begin{steps}
+        \item[1] 增加原子整数的 \verb"tid"。在 schedule 外添加
+        \begin{lstlisting}[language=c]
+            int value = 0;
+        \end{lstlisting} 
+        在新建任务时，添加
+        \begin{lstlisting}[language=c]
+            newTask->tid = __sync_fetch_and_add(&value,1);
+        \end{lstlisting}
+        即可，以上的程序皆按照这种方式修复。运行正常。
+
+        \item[2] 为了计算周转时间、等待时间和相应时间，需要修改一些文件的定义。
+         
+        添加 \verb"task" 类型的一个属性 \verb"exec" 用于计算上一次运行结束的时刻，初始会在相应的初始化阶段被赋值为 0。
+        
+        \code{src/posix/task.h}{c}
+
+        重点修改 CPU 部分的定义。添加 CPU 时钟 \verb"clock"，当一个任务即将运行的时候，如果从未运行过，也即 \verb"exec" 是 0，就会添加任务数，并且计入相应时间。等待时间是当前时刻与上一时间片执行完毕时刻的差值。执行完毕后，增加时钟时间，修改剩余时间，赋值该事件片执行结束时间，如果没有剩余时间，就将当前的时钟时间计入周转时间。
+
+        \code{src/posix/cpu.c}{c}
+
+        修改 \verb"driver.c" 在 \verb"schedule()" 结束后调用 \verb"printAvg()" 函数，打印对应的时间。运行示例如下：
+
+        \includegraphics[width=0.6\textwidth]{avg.png}
+
+        所有的算法在标准集上的结果如下：
+        
+        \begin{center}
+            \begin{tabular}{c|rrr}
+                算法 & 周转时间 & 等待时间 & 响应时间 \\
+                \hline
+                FCFS & 94.375 & 73.125 & 73.125 \\
+                SJF & 82.500 & 61.250 & 61.250 \\
+                优先级 & 96.250 & 75.000 & 75.000 \\
+                轮转 & 128.750 & 107.500 & 35.000 \\
+                优先级--轮转 & 75.625 & 65.625 & 50.625
+            \end{tabular}
+        \end{center}
+        
+        \begin{tikzpicture}
+            \begin{axis}[legend pos={outer north east},
+            grid={major},
+            symbolic x coords={FCFS,SJF,Priority,RR,Priority\_RR},ybar,]
+             \addplot+ [] coordinates { (FCFS,94.375) (SJF,82.500) (Priority,96.250) (RR,128.750) (Priority\_RR,75.625)};
+             \addplot+ [] coordinates { (FCFS,73.125) (SJF,61.250) (Priority,75.000) (RR,107.500) (Priority\_RR,75.625)};
+             \addplot+ [] coordinates { (FCFS,73.125) (SJF,61.250) (Priority,75.000) (RR,35.000) (Priority\_RR,50.625)};
+             \legend{Turnaround Avg,Waiting Avg,Response Avg,}
+            \end{axis}
+        \end{tikzpicture}
+            
+
+    \end{steps}  
 \end{problems} 
 
 \end{document}
