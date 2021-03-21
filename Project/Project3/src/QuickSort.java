@@ -1,17 +1,44 @@
-import java.util.*;
+import java.util.concurrent.ForkJoinPool;
+import java.util.concurrent.RecursiveAction;
 
-public class QuickSort {
+public class QuickSort extends RecursiveAction{
 
-    public static void sort(Comparable[] a){
-        sort(a, 0, a.length - 1);
+    static final int THRESHOLD = 100;
+    static final int SIZE = 1000;
+
+    private int low;
+    private int high;
+    private Comparable[] array;
+
+    public QuickSort(Comparable[] array, int low, int high){
+        this.array = array;
+        this.low = low;
+        this.high = high;
     }
 
-    public static void sort(Comparable[] a, int low, int high){
-        int mid;
-        if (low>=high) return;
-        mid = divide(a, low, high);
-        sort(a, low, mid-1);
-        sort(a, mid+1, high);
+    protected void compute(){
+        if(high - low < THRESHOLD){
+            // Apply Selection Sort
+            int i,j,min;
+            for(i = 0; i < array.length; i++){
+                min = i;
+                for(j = i+1; j < array.length; j++)
+                    if(less(array[j],array[min]))
+                        min = j;
+                exch(array, i, min);
+            }
+        } else {
+            int mid = divide(array, low, high);
+
+            QuickSort leftAction = new QuickSort(array, low, mid-1);
+            QuickSort rightAction = new QuickSort(array, mid+1, high);
+
+            leftAction.fork();
+            rightAction.fork();
+
+            rightAction.join();
+            leftAction.join();
+        }
     }
 
     public static int divide(Comparable[] a, int low, int high){
@@ -49,11 +76,26 @@ public class QuickSort {
     }
 
     public static void main(String[] args) {
-        Scanner scanner = new Scanner(System.in);
-        String str = scanner.nextLine();
-        scanner.close();
-        String array[] = str.split(" ");
-        sort(array);
+        // Scanner scanner = new Scanner(System.in);
+        // String str = scanner.nextLine();
+        // scanner.close();
+        // String array[] = str.split(" ");
+
+        Comparable[] array = new Comparable[SIZE];
+
+		// create SIZE random integers between 0 and 9
+		java.util.Random rand = new java.util.Random();
+
+		for (int i = 0; i < SIZE; i++) {
+			array[i] = rand.nextInt(10);
+		}		
+
+        ForkJoinPool pool = new ForkJoinPool();
+
+        QuickSort action = new QuickSort(array, 0, array.length - 1);
+
+        pool.invoke(action);
+
         assert isSorted(array);
         show(array);
     }

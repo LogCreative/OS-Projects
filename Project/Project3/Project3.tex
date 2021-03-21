@@ -76,6 +76,25 @@ typedef struct {
     \code{src/threadsort.c}{c}
 
     \item[二] \textbf{分离--联合排序程序} 
+    
+    使用 java 实现快速排序和归并排序的多线程版本。当需要排序的数组量小于阈值 \verb"THRESHOLD" 100 时，将会采用选择排序。派生了了 \verb"RecursiveAction" 类用于多线程运算。使用 \verb"Comparable" 用于任何可比较类型的比较。
+
+    取消 \verb"main" 函数开始时的注释，可以用于手动输入数据进行排序。这里的测试基于 1000 个 0 ~ 9 的随机数。
+    \begin{lstlisting}[language=java]
+        Scanner scanner = new Scanner(System.in);
+        String str = scanner.nextLine();
+        scanner.close();
+        String array[] = str.split(" ");
+    \end{lstlisting}
+
+    \includegraphics[width=0.9\textwidth]{quicksort.png}
+
+    \code{src/QuickSort.java}{java}
+
+    \includegraphics[width=0.9\textwidth]{quicksort.png}
+
+    \code{src/MergeSort.java}{java}
+
 \end{problems}
 
 \end{document}
