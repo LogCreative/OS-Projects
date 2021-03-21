@@ -109,7 +109,13 @@
         
         \item[5] 优先级--轮转调度
         
+        \lstinputlisting[language=c,caption=\href{run:src/posix/schedule_priority_rr.c}{\ttfamily src/posix/schedule\_priority\_rr.c}]{src/posix/schedule_priority_rr.c}
 
+        优先级--轮转调度需要同时考虑两者，则在开始的加入 \verb"add" 的时候就会对优先级进行排序，然后不断在本优先级轮转，运行完毕后会同样调用 \verb"add" 函数插入，轮转本优先级后轮转下一优先级，直到所有的任务都被执行完毕。这里插入需要考虑更多的情况，仅仅基于给定的 \verb"list" 实现方法。该算法在标准集和特集上的运行结果分别如下：
+        
+        \includegraphics[width=0.8\textwidth]{prrr1.png}
+
+        \includegraphics[width=0.8\textwidth]{prrr2.png}
 
     \end{steps}
     \item[二] 

@@ -18,10 +18,22 @@ void add(char *name, int priority, int burst){
         taskList->next = NULL;
     } else {
         struct node* temp = taskList;
-        while(temp->next && temp->task->priority >= newTask->priority) temp = temp->next;
-        insert(&temp->next,newTask);
-    }
+        while(temp->next && temp->next->task->priority >= newTask->priority)
+            temp = temp->next;
 
+        if(temp == taskList && temp->task->priority < newTask->priority){
+            taskList = malloc(sizeof(struct node));
+            taskList->task = newTask;
+            taskList->next = temp;
+        }
+        else if(!temp->next){
+            struct node* newNode = malloc(sizeof(struct node));
+            newNode->task = newTask;
+            newNode->next = NULL;
+            temp->next = newNode;
+        }
+        else insert(&temp->next,newTask);
+    }
 }
 
 void schedule(){
@@ -33,16 +45,8 @@ void schedule(){
         thisTask->burst -= slice;
         
         delete(&taskList, thisTask);
-        if(thisTask->burst > 0){
-            struct node* temp = taskList;
-            while(temp->next && temp->task->priority>= thisTask->priority) temp = temp->next;
-            if(temp) insert(&temp->next,thisTask);
-            else{
-                taskList = malloc(sizeof(struct node));
-                taskList->task = thisTask;
-                taskList->next = NULL; 
-            }
-        }
+        if(thisTask->burst > 0)
+            add(thisTask->name,thisTask->priority,thisTask->burst);
         pivot = pivot->next;
     }
 }

@@ -51,16 +51,71 @@ void traverse(struct node *head) {
     }
 }
 
+struct node* taskList = NULL;
+
+void add(char *name, int priority, int burst){
+    Task* newTask = (Task*) malloc(sizeof(Task));
+    newTask->name = name;
+    newTask->priority = priority;
+    newTask->burst = burst;
+
+    if(!taskList){
+        taskList = malloc(sizeof(struct node));
+        taskList->task = newTask;
+        taskList->next = NULL;
+    } else {
+        struct node* temp = taskList;
+        while(temp->next && temp->next->task->priority >= newTask->priority)
+            temp = temp->next;
+
+        if(temp == taskList && temp->task->priority < newTask->priority){
+            taskList = malloc(sizeof(struct node));
+            taskList->task = newTask;
+            taskList->next = temp;
+        }
+        else if(!temp->next){
+            struct node* newNode = malloc(sizeof(struct node));
+            newNode->task = newTask;
+            newNode->next = NULL;
+            temp->next = newNode;
+        }
+        else insert(&temp->next,newTask);
+    }
+
+    traverse(taskList);
+    printf("\n");
+}
 
 int main(){
-    struct node* taskList = malloc(sizeof(struct node));
     Task* oldTask = (Task*) malloc(sizeof(Task));
     oldTask->name = "1";
-    taskList->task = oldTask;
-    taskList->next = NULL;
+    oldTask->priority = 4;
+    oldTask->burst = 10;
+    add(oldTask->name,oldTask->priority,oldTask->burst);
+
     Task* newTask = (Task*) malloc(sizeof(Task));
     newTask->name = "2";
-    insert(&taskList->next,newTask);
+    newTask->priority = 3;
+    newTask->burst = 10;
+    add(newTask->name,newTask->priority,newTask->burst);
+
+    newTask = (Task*) malloc(sizeof(Task));
+    newTask->name = "3";
+    newTask->priority = 3;
+    newTask->burst = 10;
+    add(newTask->name,newTask->priority,newTask->burst);
+
+    newTask = (Task*) malloc(sizeof(Task));
+    newTask->name = "4";
+    newTask->priority = 5;
+    newTask->burst = 10;
+    add(newTask->name,newTask->priority,newTask->burst);
+
+    newTask = (Task*) malloc(sizeof(Task));
+    newTask->name = "5";
+    newTask->priority = 5;
+    newTask->burst = 10;
+    add(newTask->name,newTask->priority,newTask->burst);
 
     return 0;
 }
