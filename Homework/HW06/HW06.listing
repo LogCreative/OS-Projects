@@ -1,0 +1,9 @@
+        StackNode *top = NULL;
+        push(5, &top);
+        push(10, &top);
+        push(15, &top);
+
+        int value = pop(&top);
+        value = pop(&top);
+        value = pop(&top);
+    

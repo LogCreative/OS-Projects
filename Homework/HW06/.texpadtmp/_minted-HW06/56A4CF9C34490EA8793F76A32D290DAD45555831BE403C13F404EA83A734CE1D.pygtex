@@ -1,0 +1,4 @@
+\begin{Verbatim}[commandchars=\\\{\}]
+\PYG{n}{atomic\PYGZus{}t} \PYG{n}{hits}\PYG{p}{;}
+\PYG{n}{atomic\PYGZus{}inc}\PYG{p}{(}\PYG{o}{\PYGZam{}}\PYG{n}{hits}\PYG{p}{);}
+\end{Verbatim}

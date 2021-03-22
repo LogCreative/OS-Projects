@@ -1,0 +1,7 @@
+\begin{Verbatim}[commandchars=\\\{\}]
+\PYG{k+kt}{int} \PYG{n}{hits}\PYG{p}{;}
+\PYG{n}{mutex\PYGZus{}lock} \PYG{n}{hitlock}\PYG{p}{;}
+\PYG{n}{hit\PYGZus{}lock}\PYG{p}{.}\PYG{n}{acquire}\PYG{p}{();}
+\PYG{n}{hits}\PYG{o}{++}\PYG{p}{;}
+\PYG{n}{hit\PYGZus{}lock}\PYG{p}{.}\PYG{n}{release}\PYG{p}{();}
+\end{Verbatim}

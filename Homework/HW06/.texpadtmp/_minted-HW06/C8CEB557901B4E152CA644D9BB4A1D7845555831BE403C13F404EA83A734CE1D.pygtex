@@ -1,0 +1,10 @@
+\begin{Verbatim}[commandchars=\\\{\}]
+\PYG{n}{StackNode} \PYG{o}{*}\PYG{n}{top} \PYG{o}{=} \PYG{n+nb}{NULL}\PYG{p}{;}
+\PYG{n}{push}\PYG{p}{(}\PYG{l+m+mi}{5}\PYG{p}{,} \PYG{o}{\PYGZam{}}\PYG{n}{top}\PYG{p}{);}
+\PYG{n}{push}\PYG{p}{(}\PYG{l+m+mi}{10}\PYG{p}{,} \PYG{o}{\PYGZam{}}\PYG{n}{top}\PYG{p}{);}
+\PYG{n}{push}\PYG{p}{(}\PYG{l+m+mi}{15}\PYG{p}{,} \PYG{o}{\PYGZam{}}\PYG{n}{top}\PYG{p}{);}
+
+\PYG{k+kt}{int} \PYG{n}{value} \PYG{o}{=} \PYG{n}{pop}\PYG{p}{(}\PYG{o}{\PYGZam{}}\PYG{n}{top}\PYG{p}{);}
+\PYG{n}{value} \PYG{o}{=} \PYG{n}{pop}\PYG{p}{(}\PYG{o}{\PYGZam{}}\PYG{n}{top}\PYG{p}{);}
+\PYG{n}{value} \PYG{o}{=} \PYG{n}{pop}\PYG{p}{(}\PYG{o}{\PYGZam{}}\PYG{n}{top}\PYG{p}{);}
+\end{Verbatim}
