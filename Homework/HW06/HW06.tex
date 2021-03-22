@@ -33,21 +33,72 @@
 \maketitle
 
 \begin{problems}
-    \item[6.8] Race conditions are possible in many computer systems. Consider anonline auction system where the current highest bid for each itemmust be maintained. A person who wishes to bid on an item calls thebid(amount) function, which compares the amount being bid to thecurrent highest bid. If the amount exceeds the current highest bid, thehighest bid is set to the new amount. This is illustrated below:
+    \item[6.8] Race conditions are possible in many computer systems. Consider an online auction system where the current highest bid for each item must be maintained. A person who wishes to bid on an item calls the bid(amount) function, which compares the amount being bid to the current highest bid. If the amount exceeds the current highest bid, the highest bid is set to the new amount. This is illustrated below:
     \begin{code}{c}
         void bid(double amount){
             if (amount > highestBid)      
                 highestBid = amount;
         }
     \end{code} 
-    Describe how a race condition is possible in this situation and whatmight be done to prevent the race condition from occurring.
-    \item[6.13] The first known correct software solution to the critical-section problemfor two processes was developed by Dekker. The two processes,P0andP1, share the following variables:
+    Describe how a race condition is possible in this situation and what might be done to prevent the race condition from occurring.
+
+    \sol 因为 \verb"highestBid" 是共享变量，一旦有两个出价不同但都高于原有价格的人并发地执行比较程序，出价较低的那一方可能会成为最高的那个：由于两者均比原有的 \verb"highestBid" 高，导致两者均进入临界区的修改部分，高价的那方刚修改完 \verb"highestBid"，低价的那方就进行了覆盖，从而导致 \verb"highestBid" 被赋予了低价方，程序运行出现了错误。
+
+    解决这个问题只需要添加一个互斥锁即可：
+    \begin{code}{c}
+        int available = 1;
+
+        void aquire(){
+            while(!available)
+                ;   /* busy wait */
+            available = 0;
+        }
+
+        void release(){
+            available = 1;
+        }
+
+        void bid(double amount){
+            aquire();
+            if (amount > highestBid)      
+                highestBid = amount;
+            release();
+        }
+    \end{code}
+
+    \item[6.13] The first known correct software solution to the critical-section problem for two processes was developed by Dekker. The two processes, $P_0$ and $P_1$, share the following variables:
     \begin{code}{c}
         boolean flag[2]; /* initially false */
         int turn;
     \end{code} 
-    The structure of process $P_i$(\verb"i" == 0 or 1) is shown in Figure 6.18. Theother process is $P_j$(\verb"j"== 1 or 0). Prove that the algorithm satisfies all three requirements for the critical-section problem.
-    \item[6.21] A multithreaded web server wishes to keep track of the number ofrequests it services (known as \emph{hits}). Consider the two following strategies to prevent a race condition on the variablehits. The first strategy is to use a basic mutex lock when updating \verb"hits":
+    The structure of process $P_i$(\verb"i" == 0 or 1) is shown in Figure 6.18. The other process is $P_j$(\verb"j" == 1 or 0). Prove that the algorithm satisfies all three requirements for the critical-section problem.
+    \begin{code}{c}
+        while (true){
+            flag[i] = true;
+            while (flag[j]){
+                if (turn == j){
+                    flag[i] = false;
+                    while (turn == j); /* do nothing */
+                    flag[i] = true;
+                }
+            }
+                
+                /* critical section */
+                
+            turn = j;
+            flag[i] = false;
+                
+                /* remainder section*/
+        }
+    \end{code}
+
+    \sol \begin{description}
+        \item[互斥] 假如 $P_i$ 在临界区执行，那么 \verb"flag[j]==false"，\verb"flag[i]==true"，\verb"turn==i"，如果此时 $P_j$ 想要进入临界区执行，修改 \verb"flag[j]=true" 后会被卡在第 6 行的 \verb"while" 循环中。满足互斥条件。
+        \item[进步] 第 13 行决定了下一个进程应该是另一个进程运行临界区，这样卡在第 6 行的另一个进程就会继续运行。
+        \item[有限等待] $P_i$ 在 $P_j$ 进入临界区后最多一次就能进入临界区（\verb"turn == i"）。
+    \end{description}
+
+    \item[6.21] A multithreaded web server wishes to keep track of the number of requests it services (known as \emph{hits}). Consider the two following strategies to prevent a race condition on the variable \verb"hits". The first strategy is to use a basic mutex lock when updating \verb"hits":
     \begin{code}{c}
         int hits;
         mutex_lock hitlock;
@@ -62,23 +113,26 @@
     \end{code}
     Explain which of these two strategies is more efficient.
 
+    \sol 第二种使用原子整数的方法更高效。因为第一种使用互斥锁也就是自旋锁，当锁不可用时需要不停地旋转，忙等待会消耗CPU资源，这对于服务器的资源是一种浪费。而原子整数并没有加锁机制的开销，对于这种整型变量更新特别有效。
+
 \end{problems}
 
-\begin{problems}
-    \item[7.8] The Linux kernel has a policy that a process cannot hold a spinlock while attempting to acquire a semaphore. Explain why this policy is in place.
-    \item[7.11] Discuss the tradeoff between fairness and throughput of operationsin the readers–writers problem. Propose a method for solving thereaders–writers problem without causing starvation.
-    \item[7.16] The C programstack-ptr.c(available in the source-code download)contains an implementation of a stack using a linked list. An example ofits use is as follows:
-    \begin{code}{c}
-        StackNode *top = NULL;
-        push(5, &top);
-        push(10, &top);
-        push(15, &top);
+% HW07
+% \begin{problems}
+%     \item[7.8] The Linux kernel has a policy that a process cannot hold a spinlock while attempting to acquire a semaphore. Explain why this policy is in place.
+%     \item[7.11] Discuss the tradeoff between fairness and throughput of operationsin the readers–writers problem. Propose a method for solving thereaders–writers problem without causing starvation.
+%     \item[7.16] The C programstack-ptr.c(available in the source-code download)contains an implementation of a stack using a linked list. An example ofits use is as follows:
+%     \begin{code}{c}
+%         StackNode *top = NULL;
+%         push(5, &top);
+%         push(10, &top);
+%         push(15, &top);
         
-        int value = pop(&top);
-        value = pop(&top);
-        value = pop(&top);
-    \end{code} 
-    This program currently has a race condition and is not appropriate fora concurrent environment. Using Pthreads mutex locks (described inSection 7.3.1), fix the race condition.
-\end{problems}
+%         int value = pop(&top);
+%         value = pop(&top);
+%         value = pop(&top);
+%     \end{code} 
+%     This program currently has a race condition and is not appropriate fora concurrent environment. Using Pthreads mutex locks (described inSection 7.3.1), fix the race condition.
+% \end{problems}
 
 \end{document}

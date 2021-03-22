@@ -1,0 +1,19 @@
+\begin{Verbatim}[commandchars=\\\{\}]
+\PYG{k}{while} \PYG{p}{(}\PYG{n+nb}{true}\PYG{p}{)\PYGZob{}}
+    \PYG{n}{flag}\PYG{p}{[}\PYG{n}{i}\PYG{p}{]} \PYG{o}{=} \PYG{n+nb}{true}\PYG{p}{;}
+    \PYG{k}{while} \PYG{p}{(}\PYG{n}{flag}\PYG{p}{[}\PYG{n}{j}\PYG{p}{])\PYGZob{}}
+        \PYG{k}{if} \PYG{p}{(}\PYG{n}{turn} \PYG{o}{==} \PYG{n}{j}\PYG{p}{)\PYGZob{}}
+            \PYG{n}{flag}\PYG{p}{[}\PYG{n}{i}\PYG{p}{]} \PYG{o}{=} \PYG{n+nb}{false}\PYG{p}{;}
+            \PYG{k}{while} \PYG{p}{(}\PYG{n}{turn} \PYG{o}{==} \PYG{n}{j}\PYG{p}{);} \PYG{c+cm}{/* do nothing */}
+            \PYG{n}{flag}\PYG{p}{[}\PYG{n}{i}\PYG{p}{]} \PYG{o}{=} \PYG{n+nb}{true}\PYG{p}{;}
+        \PYG{p}{\PYGZcb{}}
+    \PYG{p}{\PYGZcb{}}
+
+        \PYG{c+cm}{/* critical section */}
+
+    \PYG{n}{turn} \PYG{o}{=} \PYG{n}{j}\PYG{p}{;}
+    \PYG{n}{flag}\PYG{p}{[}\PYG{n}{i}\PYG{p}{]} \PYG{o}{=} \PYG{n+nb}{false}\PYG{p}{;}
+
+        \PYG{c+cm}{/* remainder section*/}
+\PYG{p}{\PYGZcb{}}
+\end{Verbatim}

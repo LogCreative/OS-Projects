@@ -48,9 +48,8 @@
     ],
     "latex-workshop.latex.recipes": [
         {
-            "name": "pdflatex*2",
+            "name": "pdflatex",
             "tools": [
-                "pdflatex",
                 "pdflatex",
             ]
         },
