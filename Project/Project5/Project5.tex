@@ -74,7 +74,7 @@
     \includegraphics[width=0.88\textwidth]{threadpool2.png}
 
     \begin{steps}
-        \item[1] \verb"pool_init()" 中初始化一个互斥锁和一个信号量。首先全局定义了两者后，再初始化 \verb"NUMBER_OF_THREADS = 3" 个 worker 线程。
+        \item[1] \verb"pool_init()" 中初始化一个互斥锁和一个信号量。首先全局定义了两者后，再初始化 \verb"NUMBER_OF_THREADS = 3" 个 worker 线程。注意此处将 \verb"sem_submit" 初始化为 0。
         \begin{lstlisting}[language=c]
             // mutex
             pthread_mutex_t queue_mutex;
@@ -164,6 +164,143 @@
         \end{lstlisting} 
     \end{steps}
     \item[二] \textbf{生产者--消费者问题}
-\end{problems} 
+    
+    生产者比消费者多的情况:
+
+    \includegraphics[width=0.8\textwidth]{pcpp.png}
+
+    消费者比生产者多的情况：
+
+    \includegraphics[width=0.8\textwidth]{pcpc.png}
+
+    两个情况都没有报错，说明互斥锁与信号量运行正常。
+
+    \begin{steps}
+        \item[1] 缓冲区
+        
+        头文件定义如下：
+
+        \code{src/pcp/buffer.h}{c}
+
+        实现如下：
+
+        \code{src/pcp/buffer.c}{c}
+
+        这里使用了一个循环队列，同上一题。
+
+        \item[2] 主函数。
+        
+        \begin{lstlisting}[language=c]
+int main(int argc, char *argv[]){
+    if(argc!=4){
+        fprintf(stderr,"Three parameters are required!\n");
+        return 1;
+    }
+
+    int sleep_amount = atoi(argv[1]);
+    int p_count = atoi(argv[2]);
+    int c_count = atoi(argv[3]);
+
+    buffer_init();
+
+    pthread_t* pbee = (pthread_t *) malloc(p_count*(sizeof(pthread_t)));
+    for(int i = 0; i < p_count; ++i)
+        pthread_create(&pbee[i], NULL, producer, NULL);
+    
+    pthread_t* cbee = (pthread_t *) malloc(c_count*(sizeof(pthread_t)));
+    for(int j = 0; j < c_count; ++j)
+        pthread_create(&cbee[j], NULL, consumer, NULL);
+    
+    sleep(sleep_amount);
+
+    return 0;
+}
+        \end{lstlisting}
+
+        按照要求的几点进行：
+        \begin{enumerate}
+            \item 获取相关参数。
+            \item 初始化缓冲区。
+            \item 创建生产者线程。
+            \item 创建消费者线程。
+            \item 主线程休眠以观察生产者与消费者的行为。
+            \item 退出。
+        \end{enumerate}
+
+        \item[3] 缓冲区初始化函数。
+        
+        \begin{lstlisting}[language=c]
+pthread_mutex_t mutex;
+sem_t empty;
+sem_t full;
+
+void buffer_init(){
+    pthread_mutex_init(&mutex,NULL);
+    sem_init(&empty, 0, BUFFER_SIZE - 1);
+    sem_init(&full, 0, 0);
+}
+        \end{lstlisting}
+
+        定义了一个互斥锁，两个信号量。由于循环队列的容量是大小 - 1，所以 \verb"empty" 信号量被初始化为 \verb"BUFFER_SIZE - 1"。
+        \item[4] 生产者函数。这里认为生产需要花费 1 秒。
+        \begin{lstlisting}[language=c]
+void *producer(void *param){
+    buffer_item item;
+
+    while(TRUE){
+        sleep(1);
+        item = rand();
+        
+        sem_wait(&empty);
+        pthread_mutex_lock(&mutex);
+        
+        int error = 0;
+
+        if(insert_item(item)){
+            fprintf(stderr,"FULL!\n");
+            error = 1;
+        }
+        else
+            fprintf(stdout,"producer produced %d\n", item);
+
+        pthread_mutex_unlock(&mutex);
+        if(!error) sem_post(&full);
+    }
+}
+        \end{lstlisting} 
+        \item[5] 消费者函数。这里认为消费需要花费 1 秒。
+        \begin{lstlisting}[language=c]
+void *consumer(void *param){
+    buffer_item item;
+
+    while(TRUE){
+        sem_wait(&full);
+        pthread_mutex_lock(&mutex);
+        
+        int error = 0;
+        if(remove_item(&item)){
+            fprintf(stderr, "EMPTY!\n");
+            error = 1;
+        }
+        else
+            fprintf(stdout, "consumer consumed %d\n", item);
+
+        pthread_mutex_unlock(&mutex);
+        if(!error) sem_post(&empty);
+
+        sleep(1);
+    }
+}
+        \end{lstlisting} 
+    \end{steps}
+\end{problems}
+
+\begin{appendices}
+    \section{第一小项全部代码}
+    \code{src/posix/threadpool.c}{c}
+    \section{第二小项全部代码}
+    \code{src/pcp/Makefile}{}
+    \code{src/pcp/pcp.c}{c}
+\end{appendices}
 
 \end{document}
