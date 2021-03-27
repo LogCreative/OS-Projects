@@ -32,9 +32,26 @@ int main(void)
 
     // submit the work to the queue
     pool_submit(&add,&work);
+    pool_submit(&add,&work);
+    pool_submit(&add,&work);
+    pool_submit(&add,&work);
+    pool_submit(&add,&work);
 
     // may be helpful 
-    //sleep(3);
+    sleep(3);
+
+    pool_submit(&add,&work);
+    pool_submit(&add,&work);
+    pool_submit(&add,&work);
+    pool_submit(&add,&work);
+    pool_submit(&add,&work);
+    pool_submit(&add,&work);
+    pool_submit(&add,&work);
+    pool_submit(&add,&work);
+    pool_submit(&add,&work);
+    pool_submit(&add,&work);
+
+    sleep(3);
 
     pool_shutdown();
 

@@ -23,42 +23,61 @@ typedef struct
 task;
 
 // the work queue
-task worktodo[QUEUE_SIZE];
+task workqueue[QUEUE_SIZE];
 
 int front = 0, rear = 0;
 
 // the worker bee
-pthread_t bee;
+pthread_t bee[NUMBER_OF_THREADS];
+
+// mutex
+pthread_mutex_t queue_mutex;
+
+// semaphore
+sem_t sem_submit;
 
 // insert a task into the queue
 // returns 0 if successful or 1 otherwise, 
 int enqueue(task t) 
 {
-    if((rear + 1) % QUEUE_SIZE == front) return 1;
-    rear = (rear + 1) % QUEUE_SIZE;
-    worktodo[rear] = t;
-    return 0;
-}
 
-int isempty(){
-    if(front==rear) return 1;
-    return 0;
+    pthread_mutex_lock(&queue_mutex);
+
+    int res = 0;
+    if((rear + 1) % QUEUE_SIZE == front) res = 1;
+    else {
+        rear = (rear + 1) % QUEUE_SIZE;
+        workqueue[rear] = t;
+    }
+
+    pthread_mutex_unlock(&queue_mutex);
+    
+    return res;
 }
 
 // remove a task from the queue
-// please check whether the queue is empty
-// before removing
 task dequeue() 
 {
+
+    pthread_mutex_lock(&queue_mutex);
+
     front = (front + 1) % QUEUE_SIZE;
-    return worktodo[front];
+    task taskfront = workqueue[front];
+
+    pthread_mutex_unlock(&queue_mutex);
+
+    return taskfront;
 }
 
 // the worker thread in the thread pool
 void *worker(void *param)
 {
-    // execute the task
-    execute(worktodo.function, worktodo.data);
+    while(TRUE){
+        sem_wait(&sem_submit);
+        // execute the task
+        task worktodo = dequeue();
+        execute(worktodo.function, worktodo.data);
+    }
 
     pthread_exit(0);
 }
@@ -76,25 +95,32 @@ void execute(void (*somefunction)(void *p), void *p)
  */
 int pool_submit(void (*somefunction)(void *p), void *p)
 {
+    task worktodo;
     worktodo.function = somefunction;
     worktodo.data = p;
-
-    return 0;
+    int res = enqueue(worktodo);
+    if (!res) sem_post(&sem_submit);
+    return res;
 }
 
 // initialize the thread pool
 void pool_init(void)
 {
-    pthread_create(&bee,NULL,worker,NULL);
-
     // mutual-exclusion locks
+    pthread_mutex_init(&queue_mutex, NULL);
 
     // semaphores
+    sem_init(&sem_submit, 0, 0);
 
+    for(int i = 0; i < NUMBER_OF_THREADS; ++i)
+        pthread_create(&bee[i],NULL,worker,NULL);
 }
 
 // shutdown the thread pool
 void pool_shutdown(void)
 {
-    pthread_join(bee,NULL);
+    for(int i = 0; i < NUMBER_OF_THREADS; ++i)
+        pthread_cancel(bee[i]);
+    for(int i = 0; i < NUMBER_OF_THREADS; ++i)
+        pthread_join(bee[i],NULL);
 }
