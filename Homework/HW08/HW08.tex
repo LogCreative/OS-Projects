@@ -1,0 +1,128 @@
+\documentclass[12pt,a4paper]{article}
+\usepackage[UTF8]{ctex}     %先引入ctex
+\usepackage[utf8]{inputenc} %再引入inputenc
+\usepackage{graphicx}
+\usepackage{lazylatex}
+\usepackage{amsmath}
+\usepackage{bookmark}
+\usepackage{enumerate}
+\usepackage{array}
+\usepackage{xfp}
+\usepackage{colortbl}
+\usepackage{tikz}
+
+\tcbuselibrary{documentation}
+\graphicspath{{img/}}
+% 边距
+\geometry{left=2.0cm,right=2.0cm,top=2.0cm,bottom=3.0cm}
+% 大题
+\newenvironment{problems}{\begin{list}{}{\renewcommand{\makelabel}[1]{\textbf{##1}\hfil}}}{\end{list}}
+% 小题
+\newenvironment{steps}{\begin{list}{}{\renewcommand{\makelabel}[1]{##1.\hfil}}}{\end{list}}
+% 答
+\providecommand{\ans}{\textbf{答}:~}
+% 解
+\providecommand{\sol}{\textbf{解}.~}
+
+\newcommand{\allpart}{20}
+\providecommand{\blk}[2]{\framebox[\fpeval{round(#2/\allpart*\textwidth*0.8,2)}pt]{$P_#1$}}
+
+\begin{document}
+\title{\normalsize \underline{操作系统(D)}\\\LARGE第 8 次作业}
+\author{李子龙 518070910095}
+\date{\today}
+\maketitle
+
+\begin{problems}
+    \item[8.3] Consider the following snapshot of a system:
+     
+    \begin{tabular}{cccc}
+         & \underline{\emph{Allocation}} & \underline{\emph{Max}} &  \underline{\emph{Available}}\\
+         & $ABCD$ & $ABCD$ & $ABCD$\\
+    $T_0$ & 0012 & 0012& 1520\\
+    $T_1$ & 1000 & 1750& \\
+    $T_2$ & 1354 & 2356& \\
+    $T_3$ & 0632 & 0652& \\
+    $T_4$ & 0014 & 0656&
+    \end{tabular} 
+
+    Answer the following questions using the banker's algorithm:
+    \begin{steps}
+        \item[a] What is the content of the matrix \emph{Need}?
+        \item[b] Is the system in a safe state?
+        \item[c] If a request from thread $T_1$ arrives for (0,4,2,0), can the request be granted immediately?
+    \end{steps}
+
+    \item[8.9] Consider the following snapshot of a system:
+    
+    \begin{tabular}{ccc}
+        & \underline{\emph{Allocation}} & \underline{\emph{Max}} \\
+        & $ABCD$ & $ABCD$ \\
+   $T_0$ & 3014 & 5117\\
+   $T_1$ & 2210 & 3211\\
+   $T_2$ & 3121 & 3321\\
+   $T_3$ & 0510 & 4612\\
+   $T_4$ & 4212 & 6325
+   \end{tabular} 
+    
+   Using the banker’s algorithm, determine whether or not each of thefollowing states is unsafe. If the state is safe, illustrate the order in whichthe threads may complete. Otherwise, illustrate why the state is unsafe.
+
+   \begin{steps}
+       \item[a] \emph{Available}=(0,3,0,1)
+       \item[b] \emph{Available}=(1,0,0,2) 
+   \end{steps}
+    \item[8.18] Which of the six resource-allocation graphs shown in Figure 8.12 illustrate deadlock? For those situations that are deadlocked, provide the cycle of threads and resources. Where there is not a deadlock situation,illustrate the order in which the threads may complete execution.
+    
+    \begin{tabular}{|l|l|}
+        \hline
+        (a) & (b)\\
+        \input{img/a.tex} & \input{img/b.tex}\\
+        \hline
+        (c) & (d)\\
+        \input{img/c.tex} & \input{img/d.tex}\\
+        \hline
+        (e) & (f)\\
+        \input{img/e.tex} & \input{img/f.tex}\\
+        \hline
+    \end{tabular}
+    \item[8.27] Consider the following snapshot of a system:
+     
+    \begin{tabular}{ccc}
+        & \underline{\emph{Allocation}} & \underline{\emph{Max}} \\
+        & $ABCD$ & $ABCD$ \\
+   $T_0$ & 1202 & 4316\\
+   $T_1$ & 0112 & 2424\\
+   $T_2$ & 1240 & 3651\\
+   $T_3$ & 1201 & 2623\\
+   $T_4$ & 1001 & 3112
+   \end{tabular} 
+
+   Using the banker's algorithm, determine whether or not each of the following states is unsafe. If the state is safe, illustrate the order in which the threads may complete. Otherwise, illustrate why the state is unsafe.
+   \begin{steps}
+    \item[a] \emph{Available}=(2,2,2,3)
+    \item[b] \emph{Available}=(4,4,1,1)
+    \item[c] \emph{Available}=(3,0,1,4)
+    \item[d] \emph{Available}=(1,5,2,2)   
+   \end{steps}
+    \item[8.28] Consider the following snapshot of a system:
+    
+    \begin{tabular}{cccc}
+        & \underline{\emph{Allocation}} & \underline{\emph{Max}} &  \underline{\emph{Available}}\\
+        & $ABCD$ & $ABCD$ & $ABCD$\\
+   $T_0$ & 3141 & 6473& 2224\\
+   $T_1$ & 2102 & 4232& \\
+   $T_2$ & 2413 & 2533& \\
+   $T_3$ & 4110 & 6332& \\
+   $T_4$ & 2221 & 5675&
+   \end{tabular} 
+
+   Answer the following questions using the banker's algorithm:
+   \begin{steps}
+       \item[a] Illustrate that the system is in a safe state by demonstrating anorder in which the threads may complete.
+       \item[b] If a request from thread $T_4$ arrives for (2,2,2,4), can the request begranted immediately.
+       \item[c] If a request from thread $T_2$ arrives for (0,1,1,0), can the request begranted immediately?
+       \item[d] If a request from thread $T_3$ arrives for (2,2,1,2), can the request begranted immediately? 
+   \end{steps}
+\end{problems}
+
+\end{document}
