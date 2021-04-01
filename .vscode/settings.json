@@ -101,7 +101,8 @@
         "corecrt_share.h": "c",
         "schedulers.h": "c",
         "list.h": "c",
-        "semaphore.h": "c"
+        "semaphore.h": "c",
+        "string.h": "c"
     },
     "launch": {
 
