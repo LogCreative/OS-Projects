@@ -50,10 +50,6 @@ int request_resources(int customer_num, int request[]){
     int found = 0;
     do {
         found = 0;
-        fprintf(stdout, "Current Available: ");
-        for(int j = 0; j < NUMBEROFRESOURCES; ++j)
-            fprintf(stdout, "%d ", available_pre[j]);
-        
         for(int i = 0; i < NUMBEROFCUSTOMERS; ++i){
             if(!finish[i]){
                 int next = 1;
@@ -67,12 +63,9 @@ int request_resources(int customer_num, int request[]){
                 for(int j = 0; j < NUMBEROFRESOURCES; ++j)
                     available_pre[j] += allocation[i][j];
                 found = 1;
-                fprintf(stdout, " > %d", i);
                 break;
             }
         }
-
-        fprintf(stdout, "\n");
     } while (found);
 
     int all_finish_flag = 1;
