@@ -1,8 +1,14 @@
 #include "tlb.h"
 
+int all_number = 0;
+int page_fault_number = 0;
+int tlb_hit_number = 0;
+
 int tlb_search(int page_number) {
 	static struct used_node* tlb_head = NULL;
 	static struct used_node* tlb_tail = NULL;
+
+	++all_number;
 
 	int result = -1;
 	for (int i = 0; i < TLBSIZE; ++i) {
@@ -15,12 +21,21 @@ int tlb_search(int page_number) {
 	if (result >= 0) {			// TLB hit 
 		search_pop(&tlb_head, &tlb_tail, page_number);
 		push(&tlb_head, &tlb_tail, page_number);
+		++tlb_hit_number;
 		return TLB[result][1];	
 	}
 	else {						// TLB miss
 
-		if (!page_table[page_number][1])	// page fault
-			handle_pagefault(page_number);		
+		if (!page_table[page_number][1]) { // page fault
+			if (handle_pagefault(page_number)) {	// page replacement
+				int frame_number_r = page_table[page_number][0];
+				for (int i = 0; i < TLBSIZE; ++i)
+					if (TLB[i][2]
+						&& TLB[i][1] == frame_number_r)
+						TLB[i][2] = 0;
+			}
+			++page_fault_number;
+		}
 
 		int frame_number = page_table[page_number][0];
 
@@ -50,3 +65,6 @@ int tlb_search(int page_number) {
 		return frame_number;
 	}
 }
+
+double get_pagefault_rate() { return (double)page_fault_number / all_number; }
+double get_tlbhit_rate() { return (double)tlb_hit_number / all_number; }

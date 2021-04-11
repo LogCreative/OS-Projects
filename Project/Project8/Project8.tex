@@ -185,8 +185,66 @@ add getPhyAdd(add _inadd) {
 
     \code{src/lru.c}{c}
 
+    \item[4.] \textbf{添加统计信息}
 
+    \includegraphics[width=0.88\textwidth]{stat.png}
+
+    添加统计接口，方可在主函数中获得统计信息。添加 \verb"-s" 参数可以显示统计信息。
+
+    \begin{lstlisting}[language=c]
+        if(argc==3 && strcmp(argv[2],"-s")==0)
+            fprintf(stdout, "\nPage-fault rate:\t%.2f\nTLB hit rate:\t\t%.2f\n", get_pagefault_rate(), get_tlbhit_rate());
+    \end{lstlisting}
+
+    \item[5.] \textbf{页面置换}
+    
+    将内存帧数设定为 128 后，结果如下：
+
+    \includegraphics[width=0.88\textwidth]{pagerepl.png}
+
+    当下的内存关于读取帧的定义发生了改变，采用 LRU 算法进行页面置换。
+    \code{src/memory.h}{c}
+    \code{src/memory.c}{c}
+
+    对于发生了页面置换后的帧 $N$，将会返回
+    \begin{equation*}
+        -N-1
+    \end{equation*}
+    标识替换。
+
+    获取内存值时，将会对访问后的帧对应的内存访问栈进行更新。注意，当页面置换已经弹出该帧时，\verb"search_pop" 将会什么都不做。
+
+    \code{src/pagetab.h}{c}
+    \code{src/pagetab.c}{c}
+
+    对应的置换信息将会传递页表中，采用下面的方式复原
+    \begin{equation*}
+        -(-N-1)-1 = N
+    \end{equation*}
+
+    并从当前的页表中寻找对应的替换帧置为无效。
+
+    \begin{lstlisting}[language=c]
+        if (!page_table[page_number][1]) { // page fault
+			if (handle_pagefault(page_number)) {	// page replacement
+				int frame_number_r = page_table[page_number][0];
+				for (int i = 0; i < TLBSIZE; ++i)
+					if (TLB[i][2]
+						&& TLB[i][1] == frame_number_r)
+						TLB[i][2] = 0;
+			}
+			++page_fault_number;
+		}
+    \end{lstlisting}
+
+    替换信息将会按照 0-1 返回到 TLB 中，将会寻找当前 TLB 中是否有对应帧的存储信息，如果有将会被置为无效，变成可以被 \verb"hole" 捕捉的 TLB 位置。找不到就什么都不做。
 
 \end{problems}
+
+\begin{appendices}
+    \section{Makefile}
+    \code{src/Makefile}{}
+
+\end{appendices}
 
 \end{document}

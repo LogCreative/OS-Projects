@@ -13,4 +13,7 @@ int TLB[TLBSIZE][3];
 
 int tlb_search(int page_number);
 
+double get_pagefault_rate();
+double get_tlbhit_rate();
+
 #endif // !TLB_GUARD

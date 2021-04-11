@@ -4,7 +4,7 @@ void search_pop(struct used_node** head, struct used_node** tail, int page_numbe
 	struct used_node* tmp = *head;
 	while (tmp && tmp->page_number != page_number)
 		tmp = tmp->next;
-	if (!tmp) return;
+	if (!tmp) return;		// If nothing is found, then do nothing.
 	if (*head == *tail) {
 		*head = *tail = NULL;
 		return;
