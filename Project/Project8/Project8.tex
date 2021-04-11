@@ -1,0 +1,153 @@
+\documentclass[12pt,a4paper]{article}
+\usepackage[UTF8]{ctex}     %先引入ctex
+\usepackage[utf8]{inputenc} %再引入inputenc
+\usepackage{graphicx}
+\usepackage{geometry}
+\usepackage{xcolor}
+% \usepackage{lazylatex}
+\usepackage{amsmath}
+\usepackage{enumerate}
+\usepackage{caption}
+\usepackage{listings}
+\captionsetup[lstlisting]{labelfont=bf,justification=justified}
+
+\usepackage{tikz}
+\usepackage{pgfplots}
+\pgfplotsset{compat=1.17}
+\usepackage{appendix}
+
+\graphicspath{{img/}}
+% 边距
+\geometry{left=2.0cm,right=2.0cm,top=2.0cm,bottom=3.0cm}
+% 大题
+\newenvironment{problems}{\begin{list}{}{\renewcommand{\makelabel}[1]{\textbf{##1}\hfil}}}{\end{list}}
+% 小题
+\newenvironment{steps}{\begin{list}{}{\renewcommand{\makelabel}[1]{##1.\hfil}}}{\end{list}}
+% 答
+\providecommand{\ans}{\textbf{答}:~}
+% 解
+\providecommand{\sol}{\textbf{解}.~}
+
+\usepackage[colorlinks,linkcolor=blue]{hyperref}
+\usepackage{bookmark}
+\providecommand{\code}[2]{\lstinputlisting[language=#2,caption=\href{run:#1}{\ttfamily #1}]{#1}}
+\providecommand{\img}[1]{\includegraphics[width=0.88\textwidth]{#1}}
+
+% listings
+\definecolor{grey}{rgb}{0.8,0.8,0.8}
+\definecolor{darkgreen}{rgb}{0,0.3,0}
+\definecolor{darkblue}{rgb}{0,0,0.3}
+\lstset{%
+    % numbers=left, %行号
+    % numberstyle=\tiny\color{grey},
+    showstringspaces=false,
+    showspaces=false,%
+    tabsize=4,%
+    frame=shadowbox,%
+    basicstyle={\ttfamily\scriptsize},%
+    keywordstyle=\color{blue!80!black}\bfseries,%
+    identifierstyle=,%
+    commentstyle=\color{green!50!blue}\itshape,%
+    stringstyle=\color{green!50!black},%
+    rulesepcolor=\color{gray!20!white},
+    breaklines,
+    columns=flexible,
+    extendedchars=false,
+    %mathescape=true,
+    language=c,
+}
+
+\begin{document}
+\title{\normalsize \underline{操作系统(D)}\\\LARGE 项目 8}
+\author{李子龙 518070910095}
+\date{\today}
+\maketitle
+
+\textbf{设计虚拟内存管理器}
+
+\begin{problems}
+    \item[1.] \textbf{起步}
+    
+    首先将测试用的地址写入 trial.txt，以测试 \verb"addext" 内存地址分析模块的正确性。
+    \code{src/trial.txt}{}
+
+    \includegraphics[width=0.88\textwidth]{trial.png}
+
+    定义地址结构和地址提取器如下：
+    \code{src/addext.h}{c}
+    \code{src/addext.c}{c}
+    
+    \item[2.] \textbf{处理页面错误}
+    
+    接着，先不考虑 TLB，只使用页表。将输出结果与正确参考比较，结论是正确：
+
+    \includegraphics[width=0.88\textwidth]{pagetab.png}
+
+    首先对输入流分析，在 \verb"main" 函数里的情形如下：
+    \begin{lstlisting}[language=c]
+    while(fgets(addline, MAXLINE, addfile)!=NULL){
+        int rline = atoi(addline);
+        add viradd = addext(rline);
+        add phyadd = getPhyAdd(viradd);
+        fprintf(stdout, "Virtual address: %d Physical address: %d Value: %d\n", 
+            getAdd(viradd), getAdd(phyadd), getValue(phyadd));
+    }
+    \end{lstlisting}
+
+    获取值是直接从内存中获得对应位置的值：
+    \begin{lstlisting}[language=c]
+int getValue(add _phyadd) {
+    return mem[_phyadd.number][_phyadd.offset];
+}
+    \end{lstlisting}
+
+    其中 \verb"mem" 是用 \verb"char" 存储的：
+    \code{src/memory.h}{c}
+
+    当前只使用页表是不需要考虑 TLB 的获取物理地址的函数如下：
+    \begin{lstlisting}[language=c]
+add getPhyAdd(add _inadd) {
+    add phyadd;
+
+    if (!page_table[_inadd.number][1])
+        handle_pagefault(_inadd.number);
+
+    phyadd.number = page_table[_inadd.number][0];
+    phyadd.offset = _inadd.offset;
+    return phyadd;
+}
+    \end{lstlisting}
+
+    一旦有页面错误就会触发对应的函数，将内容存放到内存中去：
+    \begin{lstlisting}[language=c]
+void handle_pagefault(int page_number) {
+	int frame_number = read_frame(page_number);
+	page_table[page_number][0] = frame_number;
+	page_table[page_number][1] = 1;
+}
+    \end{lstlisting}
+
+    由于现在的内存充足，帧码直接用静态变量 \verb"frame_number" 递增存储。
+    \begin{lstlisting}[language=c]
+int read_frame(int page_number) {
+	static int frame_number = 0;
+
+	FILE* backstore;
+	if ((backstore = fopen("BACKING_STORE.bin", "rb")) == NULL) {
+		fprintf(stderr, "Empty file storage!\n");
+		return -1;
+	}
+
+	int frame_number_ = frame_number++;
+	long pos = page_number * FRAMESIZE;
+	fseek(backstore, pos, SEEK_SET);
+	fread(mem[frame_number_], sizeof(char), FRAMESIZE, backstore);
+	fclose(backstore);
+
+	return frame_number_;
+}
+    \end{lstlisting}
+    这里使用了二进制文件读取的方式复制到内存中去。
+\end{problems}
+
+\end{document}

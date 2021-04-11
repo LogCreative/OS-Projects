@@ -105,7 +105,8 @@
         "string.h": "c",
         "algorithm": "c",
         "iterator": "c",
-        "xutility": "c"
+        "xutility": "c",
+        "addext.h": "c"
     },
     "launch": {
 
