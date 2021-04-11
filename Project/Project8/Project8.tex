@@ -148,6 +148,45 @@ int read_frame(int page_number) {
 }
     \end{lstlisting}
     这里使用了二进制文件读取的方式复制到内存中去。
+
+    \item[3.] \textbf{使用 TLB}
+    
+    使用 \verb"test.sh" 脚本进行相同的测试后，结果仍然是一致的。
+    \code{src/test.sh}{}
+    
+    \includegraphics[width=0.88\textwidth]{tlb.png}
+
+    首先，输入流分析被重定向到 TLB 对应的接口。
+    \begin{lstlisting}[language=c]
+add getPhyAdd(add _inadd) {
+    add phyadd;
+
+    phyadd.number = tlb_search(_inadd.number);
+    phyadd.offset = _inadd.offset;
+    
+    return phyadd;
+}
+    \end{lstlisting}
+
+    TLB 由 16 个内存块组成。
+    \code{src/tlb.h}{c}
+
+    而最主要的 \verb"tlb_search" 函数首先会尝试 TLB 命中，接着如果是 TLB 未命中，就看需不需要触发页面缺失，然后看是否由空余 TLB 空间用于存储到 TLB 中。如果 TLB 满，就会使用 LRU 算法进行 TLB 置换。
+    \code{src/tlb.c}{c}
+
+    对于 TLB 使用状态使用了双向链表式栈存储，记录头 \verb"tlb_head" 和尾 \verb"tlb_tail"。对应的 LRU 操作具有如下定义：
+    \code{src/lru.h}{c}
+
+    \begin{itemize}
+        \item \verb"search_pop" 将会寻找对应的栈节点，并移除。
+        \item \verb"push" 入栈操作。
+        \item \verb"bottom_pop" 栈底出栈。
+    \end{itemize}
+
+    \code{src/lru.c}{c}
+
+
+
 \end{problems}
 
 \end{document}

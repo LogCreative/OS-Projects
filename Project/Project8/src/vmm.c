@@ -1,5 +1,5 @@
 #include "addext.h"
-#include "pagetab.h"
+#include "tlb.h"
 #include "memory.h"
 
 #define MAXLINE 7   // 65535 + \n + \0
@@ -7,11 +7,9 @@
 add getPhyAdd(add _inadd) {
     add phyadd;
 
-    if (!page_table[_inadd.number][1])
-        handle_pagefault(_inadd.number);
-
-    phyadd.number = page_table[_inadd.number][0];
+    phyadd.number = tlb_search(_inadd.number);
     phyadd.offset = _inadd.offset;
+    
     return phyadd;
 }
 

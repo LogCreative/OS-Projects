@@ -1,3 +1,6 @@
+#ifndef PAGETAB
+#define PAGETAB 1
+
 #include "memory.h"
 
 #define PAGETABLESIZE 256
@@ -10,3 +13,5 @@
 int page_table[PAGETABLESIZE][2];
 
 void handle_pagefault(int page_number);
+
+#endif
