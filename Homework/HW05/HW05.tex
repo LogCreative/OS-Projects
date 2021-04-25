@@ -32,232 +32,234 @@
 \date{\today}
 \maketitle
 
-\begin{problems}
-    \item[5.4] Consider the following set of processes, with the length of the CPU burst
-    time given in milliseconds:
+这次作业做的比较差。要分清抢占式和非抢占式。
 
-    \begin{tabular}{ccc}
-        \underline{Process} & \underline{Burst Time} & \underline{Priority} \\
-        $P_1$ & 2 & 2 \\
-        $P_2$ & 1 & 1 \\
-        $P_3$ & 8 & 4 \\
-        $P_4$ & 4 & 2 \\
-        $P_5$ & 5 & 3
-    \end{tabular}
+% \begin{problems}
+%     \item[5.4] Consider the following set of processes, with the length of the CPU burst
+%     time given in milliseconds:
 
-    The processes are assumed to have arrived in the order $P_1$, $P_2$, $P_3$, $P_4$, $P_5$,
-    all at time 0.
+%     \begin{tabular}{ccc}
+%         \underline{Process} & \underline{Burst Time} & \underline{Priority} \\
+%         $P_1$ & 2 & 2 \\
+%         $P_2$ & 1 & 1 \\
+%         $P_3$ & 8 & 4 \\
+%         $P_4$ & 4 & 2 \\
+%         $P_5$ & 5 & 3
+%     \end{tabular}
 
-    \begin{steps}
-        \item[a] Draw four Gantt charts that illustrate the execution of these processes
-        using the following scheduling algorithms: FCFS, SJF, nonpreemptive
-        priority (a larger priority number implies a higher
-        priority), and RR (quantum = 2).
-        \item[b] What is the turnaround time of each process for each of the
-        scheduling algorithms in part a?
-        \item[c] What is the waiting time of each process for each of these scheduling
-        algorithms?
-        \item[d] Which of the algorithms results in the minimum average waiting
-        time (over all processes)?
-    \end{steps}
+%     The processes are assumed to have arrived in the order $P_1$, $P_2$, $P_3$, $P_4$, $P_5$,
+%     all at time 0.
 
-    \sol
-        \begin{steps}
-            \item[a] 甘特图如下：
+%     \begin{steps}
+%         \item[a] Draw four Gantt charts that illustrate the execution of these processes
+%         using the following scheduling algorithms: FCFS, SJF, nonpreemptive
+%         priority (a larger priority number implies a higher
+%         priority), and RR (quantum = 2).
+%         \item[b] What is the turnaround time of each process for each of the
+%         scheduling algorithms in part a?
+%         \item[c] What is the waiting time of each process for each of these scheduling
+%         algorithms?
+%         \item[d] Which of the algorithms results in the minimum average waiting
+%         time (over all processes)?
+%     \end{steps}
+
+%     \sol
+%         \begin{steps}
+%             \item[a] 甘特图如下：
              
-            \renewcommand{\allpart}{20}
-            \begin{tabular}{cc}
-                FCFS & \blk{1}{2}\blk{2}{1}\blk{3}{8}\blk{4}{4}\blk{5}{5}\\
-                SJF & \blk{2}{1}\blk{1}{2}\blk{4}{4}\blk{5}{5}\blk{3}{8}\\
-                Prority & \blk{3}{8}\blk{5}{5}\blk{1}{2}\blk{4}{4}\blk{2}{1}\\
-                RR & \blk{1}{2}\blk{2}{1}\blk{3}{2}\blk{4}{2}\blk{5}{2}\blk{3}{2}\blk{4}{2}\blk{5}{2}\blk{3}{2}\blk{5}{1}\blk{3}{2}
-            \end{tabular} 
+%             \renewcommand{\allpart}{20}
+%             \begin{tabular}{cc}
+%                 FCFS & \blk{1}{2}\blk{2}{1}\blk{3}{8}\blk{4}{4}\blk{5}{5}\\
+%                 SJF & \blk{2}{1}\blk{1}{2}\blk{4}{4}\blk{5}{5}\blk{3}{8}\\
+%                 Prority & \blk{3}{8}\blk{5}{5}\blk{1}{2}\blk{4}{4}\blk{2}{1}\\
+%                 RR & \blk{1}{2}\blk{2}{1}\blk{3}{2}\blk{4}{2}\blk{5}{2}\blk{3}{2}\blk{4}{2}\blk{5}{2}\blk{3}{2}\blk{5}{1}\blk{3}{2}
+%             \end{tabular} 
 
-            \item[b] 周转时间表：
-            \begin{center}
-            \begin{tabular}{c|rrrr}
-                & FCFS & SJF & Priority & RR \\
-                \hline
-                $P_1$ & 2 & 3 & 15& 2\\
-                $P_2$ & 3 & 1 & 20& 3\\
-                $P_3$ & 11& 7 & 8 & 20\\
-                $P_4$ & 15& 12& 19& 13\\
-                $P_5$ & 20& 20& 13& 18
-            \end{tabular}
-            \end{center}
+%             \item[b] 周转时间表：
+%             \begin{center}
+%             \begin{tabular}{c|rrrr}
+%                 & FCFS & SJF & Priority & RR \\
+%                 \hline
+%                 $P_1$ & 2 & 3 & 15& 2\\
+%                 $P_2$ & 3 & 1 & 20& 3\\
+%                 $P_3$ & 11& 7 & 8 & 20\\
+%                 $P_4$ & 15& 12& 19& 13\\
+%                 $P_5$ & 20& 20& 13& 18
+%             \end{tabular}
+%             \end{center}
 
-            \item[c] 等待时间表：
-            \begin{center}
-            \begin{tabular}{c|rrrr}
-                & FCFS & SJF & Priority & RR \\
-                \hline
-                $P_1$ & 0 & 1 & 13&0\\
-                $P_2$ & 2 & 0 & 19&2\\
-                $P_3$ & 3 & 12& 0 &12\\
-                $P_4$ & 11& 3 & 15&9\\
-                $P_5$ & 15& 7 & 8 &13
-            \end{tabular}
-            \end{center}
-            \item[d] 等待平均时间：
-            \begin{center}
-            \begin{tabular}{c|rrrr}
-                & FCFS & SJF & Priority & RR \\
-                \hline
-                Waiting Avg & 6.2& 4.6& 11& 7.2\\ 
-            \end{tabular}
-            \end{center} 
+%             \item[c] 等待时间表：
+%             \begin{center}
+%             \begin{tabular}{c|rrrr}
+%                 & FCFS & SJF & Priority & RR \\
+%                 \hline
+%                 $P_1$ & 0 & 1 & 13&0\\
+%                 $P_2$ & 2 & 0 & 19&2\\
+%                 $P_3$ & 3 & 12& 0 &12\\
+%                 $P_4$ & 11& 3 & 15&9\\
+%                 $P_5$ & 15& 7 & 8 &13
+%             \end{tabular}
+%             \end{center}
+%             \item[d] 等待平均时间：
+%             \begin{center}
+%             \begin{tabular}{c|rrrr}
+%                 & FCFS & SJF & Priority & RR \\
+%                 \hline
+%                 Waiting Avg & 6.2& 4.6& 11& 7.2\\ 
+%             \end{tabular}
+%             \end{center} 
 
-            所以 SJF 拥有更短的平均等待时间。
-        \end{steps}
+%             所以 SJF 拥有更短的平均等待时间。
+%         \end{steps}
 
-    \item[5.5] The following processes are being scheduled using a preemptive, roundrobin
-    scheduling algorithm.
+%     \item[5.5] The following processes are being scheduled using a preemptive, roundrobin
+%     scheduling algorithm.
 
-    \begin{tabular}{cccc}
-        \underline{Process} & \underline{Priority} & \underline{Burst} & \underline{Arrival} \\
-        $P_1$ & 40& 20& 0\\
-        $P_2$ & 30& 25& 25\\
-        $P_3$ & 30& 25& 30
-\\        $P_4$ & 35& 15& 60
-\\        $P_5$ & 5 &10 &100
-\\        $P_6$ & 10& 10& 105
-    \end{tabular}
+%     \begin{tabular}{cccc}
+%         \underline{Process} & \underline{Priority} & \underline{Burst} & \underline{Arrival} \\
+%         $P_1$ & 40& 20& 0\\
+%         $P_2$ & 30& 25& 25\\
+%         $P_3$ & 30& 25& 30
+% \\        $P_4$ & 35& 15& 60
+% \\        $P_5$ & 5 &10 &100
+% \\        $P_6$ & 10& 10& 105
+%     \end{tabular}
 
-    Each process is assigned a numerical priority,with a higher number indicating
-a higher relative priority. In addition to the processes listed below,
-the system also has an \textbf{idle task} (which consumes no CPU resources and
-is identified as $P_{idle}$). This task has priority 0 and is scheduled whenever
-the system has no other available processes to run. The length of a time quantum is 10 units. If a process is preempted by a higher-priority
-process, the preempted process is placed at the end of the queue.
+%     Each process is assigned a numerical priority,with a higher number indicating
+% a higher relative priority. In addition to the processes listed below,
+% the system also has an \textbf{idle task} (which consumes no CPU resources and
+% is identified as $P_{idle}$). This task has priority 0 and is scheduled whenever
+% the system has no other available processes to run. The length of a time quantum is 10 units. If a process is preempted by a higher-priority
+% process, the preempted process is placed at the end of the queue.
 
-\begin{steps}
-    \item[a] Show the scheduling order of the processes using a Gantt chart.
-    \item[b] What is the turnaround time for each process?
-    \item[c]  What is the waiting time for each process?
-    \item[d] What is the CPU utilization rate?
-\end{steps}
+% \begin{steps}
+%     \item[a] Show the scheduling order of the processes using a Gantt chart.
+%     \item[b] What is the turnaround time for each process?
+%     \item[c]  What is the waiting time for each process?
+%     \item[d] What is the CPU utilization rate?
+% \end{steps}
 
-\sol \begin{steps}
-    \item[a] 甘特图如下：
+% \sol \begin{steps}
+%     \item[a] 甘特图如下：
     
-    \renewcommand{\allpart}{125}
-    \begin{tabular}{cc}
-        RR & \blk{1}{10}\blk{1}{10}\blk{{idle}}{10}\blk{2}{10}\blk{3}{10}\blk{2}{10}\blk{4}{10}\blk{3}{5}\blk{2}{5}\blk{4}{5}\blk{{idle}}{10}\blk{{idle}}{10}\blk{6}{10}\blk{5}{10}
-    \end{tabular}
+%     \renewcommand{\allpart}{125}
+%     \begin{tabular}{cc}
+%         RR & \blk{1}{10}\blk{1}{10}\blk{{idle}}{10}\blk{2}{10}\blk{3}{10}\blk{2}{10}\blk{4}{10}\blk{3}{5}\blk{2}{5}\blk{4}{5}\blk{{idle}}{10}\blk{{idle}}{10}\blk{6}{10}\blk{5}{10}
+%     \end{tabular}
 
-    \item[b] 周转时间表：
+%     \item[b] 周转时间表：
     
-    \begin{tabular}{c|rrrrrr}
-        & $P_1$ & $P_2$ & $P_3$ & $P_4$ & $P_5$ & $P_6$ \\
-        \hline
-        finish & 20 & 60 & 75 & 85 & 125 & 115\\
-        \rowcolor{green!20} turnaround & 20 & 35 & 45 & 25 & 25 & 10
-    \end{tabular}
+%     \begin{tabular}{c|rrrrrr}
+%         & $P_1$ & $P_2$ & $P_3$ & $P_4$ & $P_5$ & $P_6$ \\
+%         \hline
+%         finish & 20 & 60 & 75 & 85 & 125 & 115\\
+%         \rowcolor{green!20} turnaround & 20 & 35 & 45 & 25 & 25 & 10
+%     \end{tabular}
 
-    \item[c] 等待时间：
+%     \item[c] 等待时间：
      
-    \begin{tabular}{c|rrrrrr}
-         & $P_1$ & $P_2$ & $P_3$ & $P_4$ & $P_5$ & $P_6$ \\
-        \hline
-        arrival & 0 & 25 & 30 & 60 & 100 & 105 \\
-        \rowcolor{green!20} waiting & 0 & 30 & 20 & 10 & 15 & 0 
-    \end{tabular}
+%     \begin{tabular}{c|rrrrrr}
+%          & $P_1$ & $P_2$ & $P_3$ & $P_4$ & $P_5$ & $P_6$ \\
+%         \hline
+%         arrival & 0 & 25 & 30 & 60 & 100 & 105 \\
+%         \rowcolor{green!20} waiting & 0 & 30 & 20 & 10 & 15 & 0 
+%     \end{tabular}
 
-    \item[d] CPU 利用率：
-    \begin{equation*}
-        \left(1 - \frac{30}{125} \right)\times 100 \%=76\% 
-    \end{equation*} 
+%     \item[d] CPU 利用率：
+%     \begin{equation*}
+%         \left(1 - \frac{30}{125} \right)\times 100 \%=76\% 
+%     \end{equation*} 
 
-\end{steps}
+% \end{steps}
 
-\item[5.10] The traditional UNIX scheduler enforces an inverse relationship between
-priority numbers and priorities: the higher the number, the lower the
-priority. The scheduler recalculates process priorities once per second
-using the following function:
-\begin{quotation}
-    Priority = (recent CPU usage / 2) + base
-\end{quotation}
-where base = 60 and \emph{recent CPU usage} refers to a value indicating how
-often a process has used the CPU since priorities were last recalculated.
-Assume that recent CPU usage for process $P_1$ is 40, for process $P_2$ is 18,
-and for process $P_3$ is 10. What will be the new priorities for these three
-processes when priorities are recalculated? Based on this information,
-does the traditional UNIX scheduler raise or lower the relative priority
-of a CPU-bound process?
+% \item[5.10] The traditional UNIX scheduler enforces an inverse relationship between
+% priority numbers and priorities: the higher the number, the lower the
+% priority. The scheduler recalculates process priorities once per second
+% using the following function:
+% \begin{quotation}
+%     Priority = (recent CPU usage / 2) + base
+% \end{quotation}
+% where base = 60 and \emph{recent CPU usage} refers to a value indicating how
+% often a process has used the CPU since priorities were last recalculated.
+% Assume that recent CPU usage for process $P_1$ is 40, for process $P_2$ is 18,
+% and for process $P_3$ is 10. What will be the new priorities for these three
+% processes when priorities are recalculated? Based on this information,
+% does the traditional UNIX scheduler raise or lower the relative priority
+% of a CPU-bound process?
 
-\sol 
+% \sol 
 
-\begin{tabular}{c|rrr}
-     & $P_1$ & $P_2$ & $P_3$ \\
-     \hline
-    recent CPU Usage & 40 & 18 & 10 \\
-    \rowcolor{green!20} priority & 80 & 69 & 65 
-\end{tabular}
+% \begin{tabular}{c|rrr}
+%      & $P_1$ & $P_2$ & $P_3$ \\
+%      \hline
+%     recent CPU Usage & 40 & 18 & 10 \\
+%     \rowcolor{green!20} priority & 80 & 69 & 65 
+% \end{tabular}
 
-UNIX 降低了常用进程的优先级。
+% UNIX 降低了常用进程的优先级。
 
-\item[5.18] The following processes are being scheduled using a preemptive,
-priority-based, round-robin scheduling algorithm.
+% \item[5.18] The following processes are being scheduled using a preemptive,
+% priority-based, round-robin scheduling algorithm.
 
-\begin{tabular}{cccc}
-    \underline{Process} & \underline{Priority} & \underline{Burst} &  \underline{Arrival}\\
-$P_1$ & 8 & 15& 0\\
-$P_2$ & 3 & 20& 0\\
-$P_3$ & 4 & 20& 20\\
-$P_4$ & 4 & 20& 25\\
-$P_5$ & 5 & 5 &45\\
-$P_6$ & 5 & 15& 55
-\end{tabular}
+% \begin{tabular}{cccc}
+%     \underline{Process} & \underline{Priority} & \underline{Burst} &  \underline{Arrival}\\
+% $P_1$ & 8 & 15& 0\\
+% $P_2$ & 3 & 20& 0\\
+% $P_3$ & 4 & 20& 20\\
+% $P_4$ & 4 & 20& 25\\
+% $P_5$ & 5 & 5 &45\\
+% $P_6$ & 5 & 15& 55
+% \end{tabular}
 
-Each process is assigned a numerical priority, with a higher number indicating
-a higher relative priority. The scheduler will execute the highest priority
-process. For processes with the same priority, a round-robin
-scheduler will be used with a time quantum of 10 units. If a process is
-preempted by a higher-priority process, the preempted process is placed
-at the end of the queue.
+% Each process is assigned a numerical priority, with a higher number indicating
+% a higher relative priority. The scheduler will execute the highest priority
+% process. For processes with the same priority, a round-robin
+% scheduler will be used with a time quantum of 10 units. If a process is
+% preempted by a higher-priority process, the preempted process is placed
+% at the end of the queue.
 
-\begin{steps}
-    \item[a] Show the scheduling order of the processes using a Gantt chart.
-    \item[b]  What is the turnaround time for each process?
-    \item[c]  What is the waiting time for each process?
-\end{steps}
+% \begin{steps}
+%     \item[a] Show the scheduling order of the processes using a Gantt chart.
+%     \item[b]  What is the turnaround time for each process?
+%     \item[c]  What is the waiting time for each process?
+% \end{steps}
 
-\sol \begin{steps}
-    \item[a] 甘特图如下：
+% \sol \begin{steps}
+%     \item[a] 甘特图如下：
     
-    \renewcommand{\allpart}{95}
-    \blk{1}{10}\blk{2}{10}\blk{1}{5}\blk{3}{10}\blk{4}{10}\blk{5}{5}\blk{2}{10}\blk{6}{10}\blk{3}{10}\blk{4}{10}\blk{6}{5}
+%     \renewcommand{\allpart}{95}
+%     \blk{1}{10}\blk{2}{10}\blk{1}{5}\blk{3}{10}\blk{4}{10}\blk{5}{5}\blk{2}{10}\blk{6}{10}\blk{3}{10}\blk{4}{10}\blk{6}{5}
     
-    \item[b] 周转时间表：
+%     \item[b] 周转时间表：
      
-    \begin{tabular}{c|rrrrrr}
-        & $P_1$ & $P_2$ & $P_3$ & $P_4$ & $P_5$ & $P_6$ \\
-        \hline
-        finish & 25 & 60 & 80 & 90 & 50 & 95\\
-        \rowcolor{green!20} turnaround & 25 & 60 & 60 & 65 & 5 & 40
-    \end{tabular}
+%     \begin{tabular}{c|rrrrrr}
+%         & $P_1$ & $P_2$ & $P_3$ & $P_4$ & $P_5$ & $P_6$ \\
+%         \hline
+%         finish & 25 & 60 & 80 & 90 & 50 & 95\\
+%         \rowcolor{green!20} turnaround & 25 & 60 & 60 & 65 & 5 & 40
+%     \end{tabular}
 
-    \item[c] 等待时间表： 
+%     \item[c] 等待时间表： 
     
-    \begin{tabular}{c|rrrrrr}
-        & $P_1$ & $P_2$ & $P_3$ & $P_4$ & $P_5$ & $P_6$ \\
-       \hline
-       arrival & 0 & 0 & 20 & 25 & 45 & 55 \\
-       \rowcolor{green!20} waiting & 10 & 40 & 40 & 45 & 0 & 25
-   \end{tabular}
+%     \begin{tabular}{c|rrrrrr}
+%         & $P_1$ & $P_2$ & $P_3$ & $P_4$ & $P_5$ & $P_6$ \\
+%        \hline
+%        arrival & 0 & 0 & 20 & 25 & 45 & 55 \\
+%        \rowcolor{green!20} waiting & 10 & 40 & 40 & 45 & 0 & 25
+%    \end{tabular}
      
-\end{steps}
+% \end{steps}
 
-\item[5.20] Which of the following scheduling algorithms could result in starvation?
-\begin{steps}
-    \item[a] First-come, first-served
-    \item[b]  Shortest job first
-    \item[c]  Round robin
-    \item[d]  Priority
-\end{steps} 
+% \item[5.20] Which of the following scheduling algorithms could result in starvation?
+% \begin{steps}
+%     \item[a] First-come, first-served
+%     \item[b]  Shortest job first
+%     \item[c]  Round robin
+%     \item[d]  Priority
+% \end{steps} 
 
-\sol 最短作业优先调度(b.) 和 优先级调度(d.)。因为前者可以作业时间很长的任务可能会永远得不到执行，后者优先级很低的任务可能永远得不到执行。
+% \sol 最短作业优先调度(b.) 和 优先级调度(d.)。因为前者可以作业时间很长的任务可能会永远得不到执行，后者优先级很低的任务可能永远得不到执行。
 
-\end{problems}
+% \end{problems}
 
 \end{document}
