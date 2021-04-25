@@ -1,3 +1,0 @@
-\begin{Verbatim}[commandchars=\\\{\}]
-\PYG{n}{printf}\PYG{p}{(}\PYG{l+s}{\PYGZdq{}CHILD: value = \PYGZpc{}d\PYGZdq{}}\PYG{p}{,} \PYG{n}{value}\PYG{p}{);}
-\end{Verbatim}

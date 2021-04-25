@@ -1,6 +1,0 @@
-\begin{Verbatim}[commandchars=\\\{\}]
-\PYG{k+kt}{void} \PYG{n+nf}{bid}\PYG{p}{(}\PYG{k+kt}{double} \PYG{n}{amount}\PYG{p}{)\PYGZob{}}
-    \PYG{k}{if} \PYG{p}{(}\PYG{n}{amount} \PYG{o}{\PYGZgt{}} \PYG{n}{highestBid}\PYG{p}{)}
-        \PYG{n}{highestBid} \PYG{o}{=} \PYG{n}{amount}\PYG{p}{;}
-\PYG{p}{\PYGZcb{}}
-\end{Verbatim}
