@@ -1,2 +1,0 @@
-C:\Users\lizil\Desktop\VMShared\linux\OS\ref\osh\osh\Debug\osh.exe
-C:\Users\lizil\Desktop\VMShared\linux\OS\ref\osh\osh\Debug\osh.pdb
