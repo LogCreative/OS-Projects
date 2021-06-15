@@ -3,8 +3,9 @@ templates/
 .texpadtmp/
 refer/
 .vs/
-HW/
+Project/
 *.aux
 *.fdb_latexmk
 *.fls
 *.log
+*.listing

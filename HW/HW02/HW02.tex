@@ -1,0 +1,50 @@
+\documentclass[12pt,a4paper]{article}
+\usepackage[UTF8]{ctex}     %先引入ctex
+\usepackage[utf8]{inputenc} %再引入inputenc
+\usepackage{graphicx}
+\usepackage{lazylatex}
+\usepackage{amsmath}
+\usepackage{bookmark}
+\tcbuselibrary{documentation}
+\graphicspath{{img/}}
+% 边距
+\geometry{left=2.0cm,right=2.0cm,top=2.0cm,bottom=3.0cm}
+% 大题
+\newenvironment{problems}{\begin{list}{}{\renewcommand{\makelabel}[1]{\textbf{##1}\hfil}}}{\end{list}}
+% 小题
+\newenvironment{steps}{\begin{list}{}{\renewcommand{\makelabel}[1]{##1.\hfil}}}{\end{list}}
+% 答
+\providecommand{\ans}{\textbf{答}:~}
+% 解
+\providecommand{\sol}{\textbf{解}.~}
+
+\begin{document}
+\title{\normalsize \underline{操作系统(D)}\\\LARGE第 2 次作业}
+\author{Log Creative }
+\date{\today}
+\maketitle
+
+\begin{problems}
+    \item[2.2] What is the purpose of the command interpreter? Why is it usually
+    separate from the kernel?
+
+    \ans \textbf{命令解释程序}的主要功能是，获取并执行用户指定的下一条命令。
+    
+    命令解释程序通过用户下达的外壳脚本指令运行一系列的系统调用来执行用户功能。系统调用是内核态的，也就是特权指令，而命令解释程序是用户态的，由用户指定。用户下达命令后，将会从用户态变为内核态，以执行系统调用，因此两者应该是分离的，因为并不在一个状态。
+
+    \item[2.5] What is the main advantage of the layered approach to system design?
+    What are the disadvantages of the layered approach?
+
+    \ans\footnote{本题答案主要摘自书本。} \textbf{分层法的主要优点}在于简化了构造和调试：所选的层次要求每层只能调用更低层次的功能（操作）和服务，这种方法简化了系统的调试和验证；每层的实现都只是利用更底层所提供的操作，且只需要知道这些操作做了什么，而并不需要这些操作是如何实现的，在更高层会隐藏低层次的数据结构、操作和硬件，以使构造更为简便。
+
+    \textbf{分层法的主要缺点}在于难以合理定义各层以及稍差的效率：更高层次只能调用更低层次的功能，如果更低层次不存在对应功能则无法调用，这对定义各层功能提出了要求；逐层的访问也会导致效率降低，不如直接调用最底层的功能来的快。
+    \item[2.7] Why do some systems store the operating system in firmware, while
+    others store it on disk?
+
+    \ans 一些操作系统存放在固件里，为了使其不易被修改，并且使用更快的存储设备与 I/O 以更方便更快捷地执行功能。
+    
+    另外一些操作系统存放在磁盘里，因为该操作系统需要的存储空间非常大，因为拥有更多的功能，使用固件存储效率不高，并且对于I/O的要求没有那么高的情况下，一些延迟都是允许的。
+\end{problems}
+
+
+\end{document}
