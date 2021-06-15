@@ -4,3 +4,7 @@ templates/
 refer/
 .vs/
 HW/
+*.aux
+*.fdb_latexmk
+*.fls
+*.log
